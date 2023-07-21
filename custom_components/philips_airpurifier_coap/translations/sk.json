@@ -1,0 +1,25 @@
+{
+  "title": "Philips AirPurifier",
+  "config": {
+    "abort": {
+      "already_configured": "Zariadenie už konfigurované",
+      "model_unsupported": "Nepodporovaný model",
+      "timeout": "Časový limit, nemožno sa pripojiť k zariadeniu"
+    },
+    "step": {
+      "user": {
+        "title": "Nový Philips AirPurifier",
+        "data": {
+          "host": "Názov hostiteľa zariadenia alebo adresa IP"
+        }
+      },
+      "confirm": {
+        "description": "Chcete nastaviť {model} {name}?"
+      }
+    },
+    "error": {
+      "host": "Vyžaduje sa adresa zariadenia",
+      "connect": "Nedá sa pripojiť k zariadeniu"
+    }
+  }
+}
