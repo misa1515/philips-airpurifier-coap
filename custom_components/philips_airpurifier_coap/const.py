@@ -521,6 +521,7 @@ LIGHT_TYPES: dict[str, LightDescription] = {
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         SWITCH_ON: 100,
         SWITCH_OFF: 0,
+        DIMMABLE: True,
     },
 }
 
