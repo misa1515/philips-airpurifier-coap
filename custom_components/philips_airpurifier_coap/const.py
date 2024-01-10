@@ -312,6 +312,7 @@ class PhilipsApi:
     NEW2_MODEL_ID = "D01S05"
     NEW2_POWER = "D03102"
     NEW2_DISPLAY_BACKLIGHT = "D0312D"
+    NEW2_TEMPERATURE = "D03224"
 
     PREFERRED_INDEX_MAP = {
         "0": ("Indoor Allergen Index", ICON.IAI),
@@ -398,6 +399,18 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
             23: "mdi:thermometer-high",
         },
         FanAttributes.LABEL: ATTR_TEMPERATURE,
+        ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
+        FanAttributes.UNIT: UnitOfTemperature.CELSIUS,
+    },
+    PhilipsApi.NEW2_TEMPERATURE: {
+        ATTR_DEVICE_CLASS: SensorDeviceClass.TEMPERATURE,
+        FanAttributes.ICON_MAP: {
+            0: "mdi:thermometer-low",
+            17: "mdi:thermometer",
+            23: "mdi:thermometer-high",
+        },
+        FanAttributes.LABEL: ATTR_TEMPERATURE,
+        FanAttributes.VALUE: lambda value, _: int(value / 10),
         ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
         FanAttributes.UNIT: UnitOfTemperature.CELSIUS,
     },
