@@ -64,6 +64,11 @@ class ICON(StrEnum):
     PREFILTER_WICK_CLEANING = "pap:prefilter_wick_cleaning"
     PM25 = "pap:pm25"
     IAI = "pap:iai"
+    PM25B = "pap:pm25b"
+    CIRCULATE = "pap:circulate"
+    CLEAN = "pap:clean"
+    MODE = "pap:mode"
+    ROTATE = "pap:rotate"
 
 
 DATA_EXTRA_MODULE_URL = "frontend_extra_module_url"
