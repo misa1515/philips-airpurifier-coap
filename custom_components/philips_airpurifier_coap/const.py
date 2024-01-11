@@ -320,6 +320,10 @@ class PhilipsApi:
     NEW2_INDOOR_ALLERGEN_INDEX = "D03120"
     NEW2_PM25 = "D03121"
     NEW2_HUMIDITY = "D03125"
+    NEW2_FILTER_NANOPROTECT_PREFILTER = "D0520D"
+    NEW2_FILTER_NANOPROTECT = "D0540E"
+    NEW2_FILTER_NANOPROTECT_PREFILTER_TOTAL = "D05207"
+    NEW2_FILTER_NANOPROTECT_TOTAL = "D05408"
 
     PREFERRED_INDEX_MAP = {
         "0": ("Indoor Allergen Index", ICON.IAI),
@@ -517,6 +521,24 @@ FILTER_TYPES: dict[str, FilterDescription] = {
         },
         FanAttributes.LABEL: FanAttributes.FILTER_NANOPROTECT_CLEAN,
         FanAttributes.TOTAL: PhilipsApi.FILTER_NANOPROTECT_CLEAN_TOTAL,
+        FanAttributes.TYPE: "",
+    },
+    PhilipsApi.NEW2_FILTER_NANOPROTECT: {
+        FanAttributes.ICON_MAP: {
+            0: ICON.FILTER_REPLACEMENT,
+            10: ICON.NANOPROTECT_FILTER,
+        },
+        FanAttributes.LABEL: FanAttributes.FILTER_NANOPROTECT,
+        FanAttributes.TOTAL: PhilipsApi.NEW2_FILTER_NANOPROTECT_TOTAL,
+        FanAttributes.TYPE: "",
+    },
+    PhilipsApi.NEW2_FILTER_NANOPROTECT_PREFILTER: {
+        FanAttributes.ICON_MAP: {
+            0: ICON.PREFILTER_CLEANING,
+            10: ICON.NANOPROTECT_FILTER,
+        },
+        FanAttributes.LABEL: FanAttributes.FILTER_NANOPROTECT_CLEAN,
+        FanAttributes.TOTAL: PhilipsApi.NEW2_FILTER_NANOPROTECT_CLEAN_TOTAL,
         FanAttributes.TYPE: "",
     },
 }
