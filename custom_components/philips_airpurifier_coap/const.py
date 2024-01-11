@@ -181,6 +181,7 @@ class FanAttributes(StrEnum):
 
     AIR_QUALITY_INDEX = "air_quality_index"
     CHILD_LOCK = "child_lock"
+    BEEP = "beep"
     DEVICE_ID = "device_id"
     DEVICE_VERSION = "device_version"
     DISPLAY_BACKLIGHT = "display_backlight"
@@ -315,8 +316,10 @@ class PhilipsApi:
     NEW2_TEMPERATURE = "D03224"
     NEW2_SOFTWARE_VERSION = "D01S12"
     NEW2_CHILD_LOCK = "D03103"
+    NEW2_BEEP = "D03130"
     NEW2_INDOOR_ALLERGEN_INDEX = "D03120"
     NEW2_PM25 = "D03121"
+    NEW2_HUMIDITY = "D03125"
 
     PREFERRED_INDEX_MAP = {
         "0": ("Indoor Allergen Index", ICON.IAI),
@@ -401,6 +404,13 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
         ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
     },
     PhilipsApi.HUMIDITY: {
+        ATTR_DEVICE_CLASS: SensorDeviceClass.HUMIDITY,
+        FanAttributes.ICON_MAP: {0: "mdi:water-percent"},
+        FanAttributes.LABEL: FanAttributes.HUMIDITY,
+        ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
+        FanAttributes.UNIT: PERCENTAGE,
+    },
+    PhilipsApi.NEW2_HUMIDITY: {
         ATTR_DEVICE_CLASS: SensorDeviceClass.HUMIDITY,
         FanAttributes.ICON_MAP: {0: "mdi:water-percent"},
         FanAttributes.LABEL: FanAttributes.HUMIDITY,
@@ -524,6 +534,13 @@ SWITCH_TYPES: dict[str, SwitchDescription] = {
         FanAttributes.LABEL: FanAttributes.CHILD_LOCK,
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         SWITCH_ON: 1,
+        SWITCH_OFF: 0,
+    },
+    PhilipsApi.NEW2_BEEP: {
+        ATTR_ICON: "mdi:volume-high",
+        FanAttributes.LABEL: FanAttributes.BEEP,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        SWITCH_ON: 100,
         SWITCH_OFF: 0,
     },
 }
