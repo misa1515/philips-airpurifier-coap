@@ -440,7 +440,7 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
             23: "mdi:thermometer-high",
         },
         FanAttributes.LABEL: ATTR_TEMPERATURE,
-        FanAttributes.VALUE: lambda value, _: int(value / 10),
+        FanAttributes.VALUE: lambda value, _: value / 10,
         ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
         FanAttributes.UNIT: UnitOfTemperature.CELSIUS,
     },
