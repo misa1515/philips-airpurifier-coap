@@ -538,7 +538,7 @@ FILTER_TYPES: dict[str, FilterDescription] = {
             10: ICON.NANOPROTECT_FILTER,
         },
         FanAttributes.LABEL: FanAttributes.FILTER_NANOPROTECT_CLEAN,
-        FanAttributes.TOTAL: PhilipsApi.NEW2_FILTER_NANOPROTECT_CLEAN_TOTAL,
+        FanAttributes.TOTAL: PhilipsApi.NEW2_FILTER_NANOPROTECT_PREFILTER_TOTAL,
         FanAttributes.TYPE: "",
     },
 }
