@@ -179,6 +179,7 @@ class FanService(StrEnum):
 class FanAttributes(StrEnum):
     """The attributes of a fan."""
 
+    ACTUAL_FAN_SPEED = "actual_fan_speed"
     AIR_QUALITY_INDEX = "air_quality_index"
     CHILD_LOCK = "child_lock"
     BEEP = "beep"
@@ -313,6 +314,7 @@ class PhilipsApi:
     NEW2_MODEL_ID = "D01S05"
     NEW2_POWER = "D03102"
     NEW2_DISPLAY_BACKLIGHT = "D0312D"
+    NEW2_DISPLAY_BACKLIGHT2 = "D03105"
     NEW2_TEMPERATURE = "D03224"
     NEW2_SOFTWARE_VERSION = "D01S12"
     NEW2_CHILD_LOCK = "D03103"
@@ -324,6 +326,7 @@ class PhilipsApi:
     NEW2_FILTER_NANOPROTECT = "D0540E"
     NEW2_FILTER_NANOPROTECT_PREFILTER_TOTAL = "D05207"
     NEW2_FILTER_NANOPROTECT_TOTAL = "D05408"
+    NEW2_FAN_SPEED = "D0310D"
 
     PREFERRED_INDEX_MAP = {
         "0": ("Indoor Allergen Index", ICON.IAI),
@@ -434,6 +437,18 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
     },
     PhilipsApi.NEW2_TEMPERATURE: {
         ATTR_DEVICE_CLASS: SensorDeviceClass.TEMPERATURE,
+        FanAttributes.ICON_MAP: {
+            0: "mdi:thermometer-low",
+            17: "mdi:thermometer",
+            23: "mdi:thermometer-high",
+        },
+        FanAttributes.LABEL: ATTR_TEMPERATURE,
+        FanAttributes.VALUE: lambda value, _: value / 10,
+        ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
+        FanAttributes.UNIT: UnitOfTemperature.CELSIUS,
+    },
+    PhilipsApi.NEW2_FAN_SPEED: {
+        ATTR_DEVICE_CLASS: SensorDeviceClass.SPEED,
         FanAttributes.ICON_MAP: {
             0: "mdi:thermometer-low",
             17: "mdi:thermometer",
@@ -591,6 +606,14 @@ LIGHT_TYPES: dict[str, LightDescription] = {
         SWITCH_OFF: 0,
     },
     PhilipsApi.NEW2_DISPLAY_BACKLIGHT: {
+        ATTR_ICON: ICON.LIGHT_DIMMING_BUTTON,
+        FanAttributes.LABEL: FanAttributes.DISPLAY_BACKLIGHT,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        SWITCH_ON: 100,
+        SWITCH_OFF: 0,
+        DIMMABLE: True,
+    },
+    PhilipsApi.NEW2_DISPLAY_BACKLIGHT2: {
         ATTR_ICON: ICON.LIGHT_DIMMING_BUTTON,
         FanAttributes.LABEL: FanAttributes.DISPLAY_BACKLIGHT,
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,

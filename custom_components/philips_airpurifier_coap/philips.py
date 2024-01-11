@@ -574,7 +574,7 @@ class PhilipsNew2GenericCoAPFan(PhilipsGenericCoAPFanBase):
         ),
     ]
 
-    AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT]
+    AVAILABLE_LIGHTS = []
     AVAILABLE_SWITCHES = []
     AVAILABLE_SELECTS = []
 
@@ -1518,11 +1518,14 @@ class PhilipsAC5659(PhilipsGenericCoAPFan):
 class PhilipsAMF765(PhilipsNew2GenericCoAPFan):
     """AMF765."""
 
+    AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT]
     AVAILABLE_SWITCHES = [PhilipsApi.NEW2_CHILD_LOCK]
 
 
 class PhilipsCX5120(PhilipsNew2GenericCoAPFan):
     """CX5120."""
+
+    AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT2]
 
 
 model_to_class = {
