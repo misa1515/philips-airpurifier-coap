@@ -567,11 +567,11 @@ class PhilipsNew2GenericCoAPFan(PhilipsGenericCoAPFanBase):
         #     PhilipsApi.NEW_PREFERRED_INDEX_MAP,
         # ),
         # device sensors
-        # (
-        #     FanAttributes.RUNTIME,
-        #     PhilipsApi.RUNTIME,
-        #     lambda x, _: str(timedelta(seconds=round(x / 1000))),
-        # ),
+        (
+            FanAttributes.RUNTIME,
+            PhilipsApi.RUNTIME,
+            lambda x, _: str(timedelta(seconds=round(x / 1000))),
+        ),
     ]
 
     AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT]
