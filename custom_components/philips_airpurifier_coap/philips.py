@@ -1518,6 +1518,8 @@ class PhilipsAC5659(PhilipsGenericCoAPFan):
 class PhilipsAMF765(PhilipsNew2GenericCoAPFan):
     """AMF765."""
 
+    AVAILABLE_SWITCHES = [PhilipsApi.NEW2_CHILD_LOCK]
+
 
 class PhilipsCX5120(PhilipsNew2GenericCoAPFan):
     """CX5120."""

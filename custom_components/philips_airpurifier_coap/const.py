@@ -314,6 +314,7 @@ class PhilipsApi:
     NEW2_DISPLAY_BACKLIGHT = "D0312D"
     NEW2_TEMPERATURE = "D03224"
     NEW2_SOFTWARE_VERSION = "D01S12"
+    NEW2_CHILD_LOCK = "D03103"
 
     PREFERRED_INDEX_MAP = {
         "0": ("Indoor Allergen Index", ICON.IAI),
@@ -503,6 +504,13 @@ SWITCH_TYPES: dict[str, SwitchDescription] = {
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         SWITCH_ON: True,
         SWITCH_OFF: False,
+    },
+    PhilipsApi.NEW2_CHILD_LOCK: {
+        ATTR_ICON: ICON.CHILD_LOCK_BUTTON,
+        FanAttributes.LABEL: FanAttributes.CHILD_LOCK,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        SWITCH_ON: 1,
+        SWITCH_OFF: 0,
     },
 }
 
