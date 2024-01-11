@@ -313,6 +313,7 @@ class PhilipsApi:
     NEW2_POWER = "D03102"
     NEW2_DISPLAY_BACKLIGHT = "D0312D"
     NEW2_TEMPERATURE = "D03224"
+    NEW2_SOFTWARE_VERSION = "D01S12"
 
     PREFERRED_INDEX_MAP = {
         "0": ("Indoor Allergen Index", ICON.IAI),
