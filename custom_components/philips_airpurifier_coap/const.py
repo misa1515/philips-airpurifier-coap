@@ -334,6 +334,7 @@ class PhilipsApi:
     NEW2_FILTER_NANOPROTECT_TOTAL = "D05408"
     NEW2_FAN_SPEED = "D0310D"
     NEW2_SWING = "D0320F"
+    NEW2_CIRCULATION = "D0310A"
 
     PREFERRED_INDEX_MAP = {
         "0": ("Indoor Allergen Index", ICON.IAI),
@@ -351,6 +352,10 @@ class PhilipsApi:
     FUNCTION_MAP = {
         "P": ("Purification", ICON.PURIFICATION_ONLY_MODE),
         "PH": ("Purification and Humidification", ICON.TWO_IN_ONE_MODE),
+    }
+    CIRCULATION_MAP = {
+        "1": ("Purification", ICON.CLEAN),
+        "2": ("Circulation", ICON.CIRCULATE),
     }
     HUMIDITY_TARGET_MAP = {
         40: ("40%", ICON.HUMIDITY_BUTTON),
@@ -667,5 +672,10 @@ SELECT_TYPES: dict[str, SelectDescription] = {
         FanAttributes.LABEL: FanAttributes.PREFERRED_INDEX,
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         OPTIONS: PhilipsApi.NEW_PREFERRED_INDEX_MAP,
+    },
+    PhilipsApi.NEW2_CIRCULATION: {
+        FanAttributes.LABEL: FanAttributes.FUNCTION,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        OPTIONS: PhilipsApi.CIRCULATION_MAP,
     },
 }
