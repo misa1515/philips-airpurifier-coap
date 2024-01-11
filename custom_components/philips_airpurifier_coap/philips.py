@@ -1526,6 +1526,7 @@ class PhilipsCX5120(PhilipsNew2GenericCoAPFan):
     """CX5120."""
 
     AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT2]
+    AVAILABLE_SWITCHES = [PhilipsApi.NEW2_SWING]
 
 
 model_to_class = {

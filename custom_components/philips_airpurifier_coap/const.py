@@ -230,6 +230,7 @@ class FanAttributes(StrEnum):
     WARN_VALUE = "warn_value"
     WARN_ICON = "warn_icon"
     RSSI = "rssi"
+    SWING = "swing"
 
 
 class FanUnits(StrEnum):
@@ -332,6 +333,7 @@ class PhilipsApi:
     NEW2_FILTER_NANOPROTECT_PREFILTER_TOTAL = "D05207"
     NEW2_FILTER_NANOPROTECT_TOTAL = "D05408"
     NEW2_FAN_SPEED = "D0310D"
+    NEW2_SWING = "D0320F"
 
     PREFERRED_INDEX_MAP = {
         "0": ("Indoor Allergen Index", ICON.IAI),
@@ -583,6 +585,13 @@ SWITCH_TYPES: dict[str, SwitchDescription] = {
         FanAttributes.LABEL: FanAttributes.BEEP,
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         SWITCH_ON: 100,
+        SWITCH_OFF: 0,
+    },
+    PhilipsApi.NEW2_SWING: {
+        ATTR_ICON: ICON.ROTATE,
+        FanAttributes.LABEL: FanAttributes.SWING,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        SWITCH_ON: 17920,
         SWITCH_OFF: 0,
     },
 }
