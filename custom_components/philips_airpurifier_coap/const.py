@@ -315,6 +315,8 @@ class PhilipsApi:
     NEW2_TEMPERATURE = "D03224"
     NEW2_SOFTWARE_VERSION = "D01S12"
     NEW2_CHILD_LOCK = "D03103"
+    NEW2_INDOOR_ALLERGEN_INDEX = "D03120"
+    NEW2_PM25 = "D03121"
 
     PREFERRED_INDEX_MAP = {
         "0": ("Indoor Allergen Index", ICON.IAI),
@@ -365,6 +367,11 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
         FanAttributes.LABEL: FanAttributes.INDOOR_ALLERGEN_INDEX,
         ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
     },
+    PhilipsApi.NEW2_INDOOR_ALLERGEN_INDEX: {
+        FanAttributes.ICON_MAP: {0: ICON.IAI},
+        FanAttributes.LABEL: FanAttributes.INDOOR_ALLERGEN_INDEX,
+        ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
+    },
     PhilipsApi.PM25: {
         ATTR_DEVICE_CLASS: SensorDeviceClass.PM25,
         FanAttributes.ICON_MAP: {0: ICON.PM25},
@@ -373,6 +380,13 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
         ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
     },
     PhilipsApi.NEW_PM25: {
+        ATTR_DEVICE_CLASS: SensorDeviceClass.PM25,
+        FanAttributes.ICON_MAP: {0: ICON.PM25},
+        FanAttributes.LABEL: FanAttributes.PM25,
+        FanAttributes.UNIT: CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+        ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
+    },
+    PhilipsApi.NEW2_PM25: {
         ATTR_DEVICE_CLASS: SensorDeviceClass.PM25,
         FanAttributes.ICON_MAP: {0: ICON.PM25},
         FanAttributes.LABEL: FanAttributes.PM25,
