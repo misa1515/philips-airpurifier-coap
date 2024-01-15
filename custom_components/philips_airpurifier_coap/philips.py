@@ -1520,6 +1520,7 @@ class PhilipsAMF765(PhilipsNew2GenericCoAPFan):
 
     AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT]
     AVAILABLE_SWITCHES = [PhilipsApi.NEW2_CHILD_LOCK]
+    AVAILABLE_SELECTS = [PhilipsApi.NEW2_CIRCULATION]
 
 
 class PhilipsCX5120(PhilipsNew2GenericCoAPFan):
