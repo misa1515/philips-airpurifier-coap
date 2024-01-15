@@ -231,6 +231,7 @@ class FanAttributes(StrEnum):
     WARN_ICON = "warn_icon"
     RSSI = "rssi"
     SWING = "swing"
+    TURBO = "turbo"
 
 
 class FanUnits(StrEnum):
@@ -460,16 +461,17 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
         FanAttributes.UNIT: UnitOfTemperature.CELSIUS,
     },
     PhilipsApi.NEW2_FAN_SPEED: {
-        ATTR_DEVICE_CLASS: SensorDeviceClass.SPEED,
         FanAttributes.ICON_MAP: {
-            0: "mdi:thermometer-low",
-            17: "mdi:thermometer",
-            23: "mdi:thermometer-high",
+            0: ICON.FAN_SPEED_BUTTON,
+            1: ICON.SPEED_1,
+            6: ICON.SPEED_2,
+            18: ICON.SPEED_3,
         },
-        FanAttributes.LABEL: ATTR_TEMPERATURE,
-        FanAttributes.VALUE: lambda value, _: value / 10,
+        FanAttributes.VALUE: lambda value, _: value
+        if int(value) < 18
+        else FanAttributes.TURBO,
+        FanAttributes.LABEL: FanAttributes.ACTUAL_FAN_SPEED,
         ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
-        FanAttributes.UNIT: UnitOfTemperature.CELSIUS,
     },
     # diagnostic information
     PhilipsApi.WATER_LEVEL: {
