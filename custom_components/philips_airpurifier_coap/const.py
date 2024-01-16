@@ -24,6 +24,7 @@ from homeassistant.helpers.entity import EntityCategory
 from .model import (
     FilterDescription,
     LightDescription,
+    NumberDescription,
     SelectDescription,
     SensorDescription,
     SwitchDescription,
@@ -69,6 +70,7 @@ class ICON(StrEnum):
     CLEAN = "pap:clean"
     MODE = "pap:mode"
     ROTATE = "pap:rotate"
+    OSCILLATE = "pap:oscillate"
 
 
 DATA_EXTRA_MODULE_URL = "frontend_extra_module_url"
@@ -232,6 +234,12 @@ class FanAttributes(StrEnum):
     RSSI = "rssi"
     SWING = "swing"
     TURBO = "turbo"
+    OSCILLATION = "oscillation"
+    VALUE_LIST = "value_list"
+    OFF = "off"
+    MIN = "min"
+    MAX = "max"
+    STEP = "step"
 
 
 class FanUnits(StrEnum):
@@ -336,6 +344,7 @@ class PhilipsApi:
     NEW2_FAN_SPEED = "D0310D"
     NEW2_SWING = "D0320F"
     NEW2_CIRCULATION = "D0310A"
+    NEW2_OSCILLATION = "D0320F"
 
     PREFERRED_INDEX_MAP = {
         "0": ("Indoor Allergen Index", ICON.IAI),
@@ -680,4 +689,17 @@ SELECT_TYPES: dict[str, SelectDescription] = {
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         OPTIONS: PhilipsApi.CIRCULATION_MAP,
     },
+}
+
+NUMBER_TYPES: dict[str, NumberDescription] = {
+    PhilipsApi.NEW2_OSCILLATION: {
+        FanAttributes.LABEL: FanAttributes.OSCILLATION,
+        ATTR_ICON: ICON.OSCILLATE,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        FanAttributes.UNIT: "°",
+        FanAttributes.OFF: 0,
+        FanAttributes.MIN: 45,
+        FanAttributes.MAX: 350,
+        FanAttributes.STEP: 5,
+    }
 }

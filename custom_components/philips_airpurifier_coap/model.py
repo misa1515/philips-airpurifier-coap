@@ -65,3 +65,16 @@ class SelectDescription(TypedDict):
     label: str
     entity_category: str
     options: dict[Any, tuple[str, str]]
+
+
+class NumberDescription(TypedDict):
+    """Number class."""
+
+    icon: str
+    label: str
+    entity_category: str
+    unit: str
+    off: int
+    min: int
+    max: int
+    step: int

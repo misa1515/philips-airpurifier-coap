@@ -283,6 +283,7 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
     AVAILABLE_ATTRIBUTES = []
     AVAILABLE_SWITCHES = []
     AVAILABLE_LIGHTS = []
+    AVAILABLE_NUMBERS = []
 
     KEY_PHILIPS_POWER = PhilipsApi.POWER
     STATE_POWER_ON = "1"
@@ -1521,6 +1522,7 @@ class PhilipsAMF765(PhilipsNew2GenericCoAPFan):
     AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT]
     AVAILABLE_SWITCHES = [PhilipsApi.NEW2_CHILD_LOCK]
     AVAILABLE_SELECTS = [PhilipsApi.NEW2_CIRCULATION]
+    AVAILABLE_NUMBERS = [PhilipsApi.NEW2_OSCILLATION]
 
 
 class PhilipsCX5120(PhilipsNew2GenericCoAPFan):
