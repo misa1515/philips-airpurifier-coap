@@ -365,7 +365,7 @@ class PhilipsApi:
     }
     CIRCULATION_MAP = {
         "1": ("Fan", ICON.CLEAN),
-        "3": ("Circulation", ICON.CIRCULATE),
+        "2": ("Circulation", ICON.CIRCULATE),
     }
     HUMIDITY_TARGET_MAP = {
         40: ("40%", ICON.HUMIDITY_BUTTON),
