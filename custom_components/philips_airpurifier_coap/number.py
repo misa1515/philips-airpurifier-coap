@@ -84,12 +84,14 @@ class PhilipsNumber(PhilipsEntity, NumberEntity):
         self._attr_entity_category = self._description.get(CONF_ENTITY_CATEGORY)
         self._attr_icon = self._description.get(ATTR_ICON)
         self._attr_mode = "slider"  # hardwired for now
-        self._attr_unit_of_measurement = self._description.get(FanAttributes.UNIT)
+        self._attr_native_unit_of_measurement = self._description.get(
+            FanAttributes.UNIT
+        )
 
-        self._attr_min = self._description.get(FanAttributes.OFF)
+        self._attr_native_min = self._description.get(FanAttributes.OFF)
         self._min = self._description.get(FanAttributes.MIN)
-        self._attr_max = self._description.get(FanAttributes.MAX)
-        self._attr_step = self._description.get(FanAttributes.STEP)
+        self._attr_native_max = self._description.get(FanAttributes.MAX)
+        self._attr_native_step = self._description.get(FanAttributes.STEP)
 
         try:
             device_id = self._device_status[PhilipsApi.DEVICE_ID]
@@ -112,14 +114,14 @@ class PhilipsNumber(PhilipsEntity, NumberEntity):
         _LOGGER.debug("async_set_native_value called with: %s", value)
 
         # Catch the boundaries
-        if value is None or value < 0:
-            value = 0
-        if value % self._attr_step > 0:
-            value = value // self._attr_step * self._attr_step
+        if value is None or value < self._attr_native_min:
+            value = self._attr_native_min
+        if value % self._attr_native_step > 0:
+            value = value // self._attr_native_step * self._attr_native_step
         if value > 0 and value < self._min:
             value = self._min
-        if value > self._attr_max:
-            value = self._attr_max
+        if value > self._attr_native_max:
+            value = self._attr_native_max
 
         _LOGGER.debug("setting number with: %s", value)
 
