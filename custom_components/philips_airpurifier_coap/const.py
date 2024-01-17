@@ -243,6 +243,7 @@ class FanAttributes(StrEnum):
     MIN = "min"
     MAX = "max"
     STEP = "step"
+    TIMER = "timer"
 
 
 class FanUnits(StrEnum):
@@ -350,6 +351,7 @@ class PhilipsApi:
     NEW2_OSCILLATION = "D0320F"
     NEW2_MODE_A = "D0310A"
     NEW2_MODE_B = "D0310C"
+    NEW2_TIMER = "D03110"
 
     PREFERRED_INDEX_MAP = {
         "0": ("Indoor Allergen Index", ICON.IAI),
@@ -371,6 +373,21 @@ class PhilipsApi:
     CIRCULATION_MAP = {
         "1": ("Fan", ICON.CLEAN),
         "2": ("Circulation", ICON.CIRCULATE),
+    }
+    TIMER_MAP = {
+        0: ("Off", "mdi:clock-plus"),
+        2: ("1h", "mdi:clock-time-one"),
+        3: ("2h", "mdi:clock-time-two"),
+        4: ("3h", "mdi:clock-time-three"),
+        5: ("4h", "mdi:clock-time-four"),
+        6: ("5h", "mdi:clock-time-five"),
+        7: ("6h", "mdi:clock-time-six"),
+        8: ("7h", "mdi:clock-time-seven"),
+        9: ("8h", "mdi:clock-time-eight"),
+        10: ("9h", "mdi:clock-time-nine"),
+        11: ("10h", "mdi:clock-time-ten"),
+        12: ("11h", "mdi:clock-time-eleven"),
+        13: ("12h", "mdi:clock-time-twelve"),
     }
     HUMIDITY_TARGET_MAP = {
         40: ("40%", ICON.HUMIDITY_BUTTON),
@@ -693,6 +710,11 @@ SELECT_TYPES: dict[str, SelectDescription] = {
         FanAttributes.LABEL: FanAttributes.FUNCTION,
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         OPTIONS: PhilipsApi.CIRCULATION_MAP,
+    },
+    PhilipsApi.NEW2_TIMER: {
+        FanAttributes.LABEL: FanAttributes.TIMER,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        OPTIONS: PhilipsApi.TIMER_MAP,
     },
 }
 
