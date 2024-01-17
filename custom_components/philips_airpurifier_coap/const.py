@@ -142,6 +142,9 @@ class PresetMode:
     TURBO = "turbo"
     GAS = "gas"
     POLLUTION = "pollution"
+    LOW = "low"
+    HIGH = "high"
+    VENTILATION = "ventilation"
 
     ICON_MAP = {
         ALLERGEN: ICON.ALLERGEN_MODE,
@@ -345,6 +348,8 @@ class PhilipsApi:
     NEW2_SWING = "D0320F"
     NEW2_CIRCULATION = "D0310A"
     NEW2_OSCILLATION = "D0320F"
+    NEW2_MODE_A = "D0310A"
+    NEW2_MODE_B = "D0310C"
 
     PREFERRED_INDEX_MAP = {
         "0": ("Indoor Allergen Index", ICON.IAI),

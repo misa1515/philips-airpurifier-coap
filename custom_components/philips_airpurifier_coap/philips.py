@@ -1528,6 +1528,41 @@ class PhilipsAMF765(PhilipsNew2GenericCoAPFan):
 class PhilipsCX5120(PhilipsNew2GenericCoAPFan):
     """CX5120."""
 
+    AVAILABLE_PRESET_MODES = {
+        PresetMode.AUTO: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 3,
+            PhilipsApi.NEW2_MODE_B: 0,
+        },
+        PresetMode.HIGH: {
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 3,
+            PhilipsApi.NEW2_MODE_B: 65,
+        },
+        PresetMode.LOW: {
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 3,
+            PhilipsApi.NEW2_MODE_B: 66,
+        },
+        PresetMode.VENTILATION: {
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 1,
+            PhilipsApi.NEW2_MODE_B: -127,
+        },
+    }
+    AVAILABLE_SPEEDS = {
+        PresetMode.HIGH: {
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 3,
+            PhilipsApi.NEW2_MODE_B: 65,
+        },
+        PresetMode.LOW: {
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 3,
+            PhilipsApi.NEW2_MODE_B: 66,
+        },
+    }
+
     AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT2]
     AVAILABLE_SWITCHES = [PhilipsApi.NEW2_SWING, PhilipsApi.NEW2_BEEP]
     UNAVAILABLE_SENSORS = [PhilipsApi.NEW2_FAN_SPEED]
