@@ -1566,6 +1566,7 @@ class PhilipsCX5120(PhilipsNew2GenericCoAPFan):
     AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT2]
     AVAILABLE_SWITCHES = [PhilipsApi.NEW2_SWING, PhilipsApi.NEW2_BEEP]
     UNAVAILABLE_SENSORS = [PhilipsApi.NEW2_FAN_SPEED]
+    AVAILABLE_SELECTS = [PhilipsApi.NEW2_TIMER]
 
 
 model_to_class = {
