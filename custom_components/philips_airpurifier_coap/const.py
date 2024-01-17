@@ -244,6 +244,7 @@ class FanAttributes(StrEnum):
     MAX = "max"
     STEP = "step"
     TIMER = "timer"
+    TARGET_TEMP = "target_temperature"
 
 
 class FanUnits(StrEnum):
@@ -352,6 +353,7 @@ class PhilipsApi:
     NEW2_MODE_A = "D0310A"
     NEW2_MODE_B = "D0310C"
     NEW2_TIMER = "D03110"
+    NEW2_TARGET_TEMP = "D0310E"
 
     PREFERRED_INDEX_MAP = {
         "0": ("Indoor Allergen Index", ICON.IAI),
@@ -728,5 +730,15 @@ NUMBER_TYPES: dict[str, NumberDescription] = {
         FanAttributes.MIN: 45,
         FanAttributes.MAX: 350,
         FanAttributes.STEP: 5,
-    }
+    },
+    PhilipsApi.NEW2_TARGET_TEMP: {
+        FanAttributes.LABEL: FanAttributes.TARGET_TEMP,
+        ATTR_ICON: "mdi:thermometer",
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        FanAttributes.UNIT: "°",
+        FanAttributes.OFF: 1,
+        FanAttributes.MIN: 1,
+        FanAttributes.MAX: 37,
+        FanAttributes.STEP: 1,
+    },
 }
