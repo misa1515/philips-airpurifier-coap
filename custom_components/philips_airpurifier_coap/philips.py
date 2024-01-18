@@ -1519,6 +1519,67 @@ class PhilipsAC5659(PhilipsGenericCoAPFan):
 class PhilipsAMF765(PhilipsNew2GenericCoAPFan):
     """AMF765."""
 
+    AVAILABLE_PRESET_MODES = {
+        PresetMode.AUTO: {
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 0,
+        },
+        PresetMode.SLEEP: {
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 17,
+        },
+        PresetMode.TURBO: {
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 18,
+        },
+    }
+    AVAILABLE_SPEEDS = {
+        PresetMode.SPEED_1: {
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 1,
+        },
+        PresetMode.SPEED_2: {
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 2,
+        },
+        PresetMode.SPEED_3: {
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 3,
+        },
+        PresetMode.SPEED_4: {
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 4,
+        },
+        PresetMode.SPEED_5: {
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 5,
+        },
+        PresetMode.SPEED_6: {
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 6,
+        },
+        PresetMode.SPEED_7: {
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 7,
+        },
+        PresetMode.SPEED_8: {
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 8,
+        },
+        PresetMode.SPEED_9: {
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 9,
+        },
+        PresetMode.SPEED_10: {
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 10,
+        },
+        PresetMode.TURBO: {
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 18,
+        },
+    }
+
     AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT]
     AVAILABLE_SWITCHES = [PhilipsApi.NEW2_CHILD_LOCK, PhilipsApi.NEW2_BEEP]
     AVAILABLE_SELECTS = [PhilipsApi.NEW2_CIRCULATION]
