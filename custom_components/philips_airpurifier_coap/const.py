@@ -385,6 +385,7 @@ class PhilipsApi:
     }
     TIMER_MAP = {
         0: ("Off", "mdi:clock-plus"),
+        1: ("0.5h", "mdi:clock-time-one"),
         2: ("1h", "mdi:clock-time-one"),
         3: ("2h", "mdi:clock-time-two"),
         4: ("3h", "mdi:clock-time-three"),
