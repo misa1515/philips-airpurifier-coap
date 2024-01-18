@@ -1585,6 +1585,7 @@ class PhilipsAMF765(PhilipsNew2GenericCoAPFan):
         PhilipsApi.NEW2_CHILD_LOCK,
         PhilipsApi.NEW2_BEEP,
         PhilipsApi.NEW2_STANDBY_SENSORS,
+        PhilipsApi.NEW2_AUTO_PLUS_AI,
     ]
     AVAILABLE_SELECTS = [PhilipsApi.NEW2_CIRCULATION, PhilipsApi.NEW2_TIMER]
     AVAILABLE_NUMBERS = [PhilipsApi.NEW2_OSCILLATION]

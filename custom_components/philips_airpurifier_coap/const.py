@@ -253,6 +253,7 @@ class FanAttributes(StrEnum):
     TIMER = "timer"
     TARGET_TEMP = "target_temperature"
     STANDBY_SENSORS = "standby_sensors"
+    AUTO_PLUS = "auto_plus"
 
 
 class FanUnits(StrEnum):
@@ -363,6 +364,7 @@ class PhilipsApi:
     NEW2_TIMER = "D03110"
     NEW2_TARGET_TEMP = "D0310E"
     NEW2_STANDBY_SENSORS = "D03134"
+    NEW2_AUTO_PLUS_AI = "D03180"
 
     PREFERRED_INDEX_MAP = {
         "0": ("Indoor Allergen Index", ICON.IAI),
@@ -647,6 +649,12 @@ SWITCH_TYPES: dict[str, SwitchDescription] = {
     PhilipsApi.NEW2_STANDBY_SENSORS: {
         ATTR_ICON: "mdi:power-settings",
         FanAttributes.LABEL: FanAttributes.STANDBY_SENSORS,
+        SWITCH_ON: 1,
+        SWITCH_OFF: 0,
+    },
+    PhilipsApi.NEW2_AUTO_PLUS_AI: {
+        ATTR_ICON: "mdi:format-annotation-plus",
+        FanAttributes.LABEL: FanAttributes.AUTO_PLUS,
         SWITCH_ON: 1,
         SWITCH_OFF: 0,
     },
