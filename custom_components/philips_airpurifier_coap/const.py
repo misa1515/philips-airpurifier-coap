@@ -373,8 +373,8 @@ class PhilipsApi:
         "PH": ("Purification and Humidification", ICON.TWO_IN_ONE_MODE),
     }
     CIRCULATION_MAP = {
-        "1": ("Fan", ICON.CLEAN),
-        "2": ("Circulation", ICON.CIRCULATE),
+        1: ("Fan", ICON.CLEAN),
+        2: ("Circulation", ICON.CIRCULATE),
     }
     TIMER_MAP = {
         0: ("Off", "mdi:clock-plus"),
