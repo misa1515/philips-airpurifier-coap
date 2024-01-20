@@ -403,6 +403,21 @@ class PhilipsApi:
         12: ("11h", "mdi:clock-time-eleven"),
         13: ("12h", "mdi:clock-time-twelve"),
     }
+    TIMER2_MAP = {
+        0: ("Off", "mdi:clock-plus"),
+        2: ("1h", "mdi:clock-time-one"),
+        3: ("2h", "mdi:clock-time-two"),
+        4: ("3h", "mdi:clock-time-three"),
+        5: ("4h", "mdi:clock-time-four"),
+        6: ("5h", "mdi:clock-time-five"),
+        7: ("6h", "mdi:clock-time-six"),
+        8: ("7h", "mdi:clock-time-seven"),
+        9: ("8h", "mdi:clock-time-eight"),
+        10: ("9h", "mdi:clock-time-nine"),
+        11: ("10h", "mdi:clock-time-ten"),
+        12: ("11h", "mdi:clock-time-eleven"),
+        13: ("12h", "mdi:clock-time-twelve"),
+    }
     HUMIDITY_TARGET_MAP = {
         40: ("40%", ICON.HUMIDITY_BUTTON),
         50: ("50%", ICON.HUMIDITY_BUTTON),
@@ -741,6 +756,11 @@ SELECT_TYPES: dict[str, SelectDescription] = {
         FanAttributes.LABEL: FanAttributes.TIMER,
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         OPTIONS: PhilipsApi.TIMER_MAP,
+    },
+    PhilipsApi.NEW2_TIMER2: {
+        FanAttributes.LABEL: FanAttributes.TIMER,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        OPTIONS: PhilipsApi.TIMER2_MAP,
     },
 }
 
