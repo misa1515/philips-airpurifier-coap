@@ -63,9 +63,9 @@ class ICON(StrEnum):
     WATER_REFILL = "pap:water_refill"
     PREFILTER_CLEANING = "pap:prefilter_cleaning"
     PREFILTER_WICK_CLEANING = "pap:prefilter_wick_cleaning"
-    PM25 = "pap:pm25"
+    PM25 = "pap:pm25b"
     IAI = "pap:iai"
-    PM25B = "pap:pm25b"
+    # PM25B = "pap:pm25b"
     CIRCULATE = "pap:circulate"
     CLEAN = "pap:clean"
     MODE = "pap:mode"
@@ -521,19 +521,19 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
         ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
         FanAttributes.UNIT: UnitOfTemperature.CELSIUS,
     },
-    PhilipsApi.NEW2_FAN_SPEED: {
-        FanAttributes.ICON_MAP: {
-            0: ICON.FAN_SPEED_BUTTON,
-            1: ICON.SPEED_1,
-            6: ICON.SPEED_2,
-            18: ICON.SPEED_3,
-        },
-        FanAttributes.VALUE: lambda value, _: value
-        if int(value) < 18
-        else FanAttributes.TURBO,
-        FanAttributes.LABEL: FanAttributes.ACTUAL_FAN_SPEED,
-        ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
-    },
+    # PhilipsApi.NEW2_FAN_SPEED: {
+    #     FanAttributes.ICON_MAP: {
+    #         0: ICON.FAN_SPEED_BUTTON,
+    #         1: ICON.SPEED_1,
+    #         6: ICON.SPEED_2,
+    #         18: ICON.SPEED_3,
+    #     },
+    #     FanAttributes.VALUE: lambda value, _: value
+    #     if int(value) < 18
+    #     else FanAttributes.TURBO,
+    #     FanAttributes.LABEL: FanAttributes.ACTUAL_FAN_SPEED,
+    #     ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
+    # },
     # diagnostic information
     PhilipsApi.WATER_LEVEL: {
         FanAttributes.ICON_MAP: {0: ICON.WATER_REFILL, 10: "mdi:water"},
