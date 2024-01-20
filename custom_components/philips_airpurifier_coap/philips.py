@@ -279,7 +279,9 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
     """Class as basis to manage a generic Philips CoAP fan."""
 
     AVAILABLE_PRESET_MODES = {}
+    REPLACE_PRESET = None
     AVAILABLE_SPEEDS = {}
+    REPLACE_SPEED = None
     AVAILABLE_ATTRIBUTES = []
     AVAILABLE_SWITCHES = []
     AVAILABLE_LIGHTS = []
@@ -386,6 +388,9 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
         """Return the selected preset mode."""
         for preset_mode, status_pattern in self._available_preset_modes.items():
             for k, v in status_pattern.items():
+                # check if the speed sensor also used for presets is different from the setting field
+                if self.REPLACE_PRESET is not None and k == self.REPLACE_PRESET[0]:
+                    k = self.REPLACE_PRESET[1]
                 if self._device_status.get(k) != v:
                     break
             else:
@@ -407,6 +412,9 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
         """Return the speed percentages."""
         for speed, status_pattern in self._available_speeds.items():
             for k, v in status_pattern.items():
+                # check if the speed sensor is different from the speed setting field
+                if self.REPLACE_SPEED is not None and k == self.REPLACE_SPEED[0]:
+                    k = self.REPLACE_SPEED[1]
                 if self._device_status.get(k) != v:
                     break
             else:
@@ -1519,6 +1527,7 @@ class PhilipsAC5659(PhilipsGenericCoAPFan):
 class PhilipsAMF765(PhilipsNew2GenericCoAPFan):
     """AMF765."""
 
+    REPLACE_PRESET = [PhilipsApi.NEW2_MODE_B, PhilipsApi.NEW2_FAN_SPEED]
     AVAILABLE_PRESET_MODES = {
         PresetMode.AUTO: {
             PhilipsApi.POWER: 1,
@@ -1533,6 +1542,7 @@ class PhilipsAMF765(PhilipsNew2GenericCoAPFan):
             PhilipsApi.NEW2_MODE_B: 18,
         },
     }
+    REPLACE_SPEED = [PhilipsApi.NEW2_MODE_B, PhilipsApi.NEW2_FAN_SPEED]
     AVAILABLE_SPEEDS = {
         PresetMode.SPEED_1: {
             PhilipsApi.POWER: 1,
