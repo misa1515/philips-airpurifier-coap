@@ -23,6 +23,7 @@ from homeassistant.util.percentage import (
 from .const import (
     DOMAIN,
     ICON,
+    SWITCH_OFF,
     SWITCH_ON,
     FanAttributes,
     FanModel,
@@ -291,6 +292,8 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
     STATE_POWER_ON = "1"
     STATE_POWER_OFF = "0"
 
+    KEY_OSCILLATION = None
+
     def __init__(  # noqa: D107
         self,
         coordinator: Coordinator,
@@ -376,6 +379,8 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
         features = FanEntityFeature.PRESET_MODE
         if self._speeds:
             features |= FanEntityFeature.SET_SPEED
+        if self.KEY_OSCILLATION is not None:
+            features |= FanEntityFeature.OSCILLATE
         return features
 
     @property
@@ -406,6 +411,31 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
     def speed_count(self) -> int:
         """Return the number of speed options."""
         return len(self._speeds)
+
+    @property
+    def oscillating(self) -> bool | None:
+        """Return if the fan is oscillating."""
+        if self.KEY_OSCILLATION is None:
+            return None
+
+        key = next(iter(self.KEY_OSCILLATION))
+        status = self._device_status.get(key)
+        on = self.KEY_OSCILLATION.get(key).get(SWITCH_ON)
+        return status is not None and status == on
+
+    async def async_oscillate(self, oscillating: bool) -> None:
+        """Osciallate the fan."""
+        if self.KEY_OSCILLATION is None:
+            return None
+
+        key = next(iter(self.KEY_OSCILLATION))
+        values = self.KEY_OSCILLATION.get(key)
+        on = values.get(SWITCH_ON)
+        off = values.get(SWITCH_OFF)
+        if oscillating:
+            await self.coordinator.client.set_control_value(key, on)
+        else:
+            await self.coordinator.client.set_control_value(key, off)
 
     @property
     def percentage(self) -> Optional[int]:
@@ -1638,9 +1668,12 @@ class PhilipsCX5120(PhilipsNew2GenericCoAPFan):
             PhilipsApi.NEW2_MODE_B: 66,
         },
     }
+    KEY_OSCILLATION = {
+        PhilipsApi.NEW2_OSCILLATION: PhilipsApi.OSCILLATION_MAP,
+    }
 
     AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT2]
-    AVAILABLE_SWITCHES = [PhilipsApi.NEW2_SWING, PhilipsApi.NEW2_BEEP]
+    AVAILABLE_SWITCHES = [PhilipsApi.NEW2_BEEP]
     UNAVAILABLE_SENSORS = [PhilipsApi.NEW2_FAN_SPEED]
     AVAILABLE_SELECTS = [PhilipsApi.NEW2_TIMER2]
     AVAILABLE_NUMBERS = [PhilipsApi.NEW2_TARGET_TEMP]

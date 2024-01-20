@@ -327,6 +327,11 @@ class PhilipsApi:
         SWITCH_OFF: "0",
     }
 
+    OSCILLATION_MAP = {
+        SWITCH_ON: 17920,
+        SWITCH_OFF: 0,
+    }
+
     # the AC1715 seems to follow a new scheme, this should later be refactored
     NEW_NAME = "D01-03"
     NEW_MODEL_ID = "D01-05"
@@ -655,13 +660,15 @@ SWITCH_TYPES: dict[str, SwitchDescription] = {
         SWITCH_ON: 100,
         SWITCH_OFF: 0,
     },
-    PhilipsApi.NEW2_SWING: {
-        ATTR_ICON: ICON.ROTATE,
-        FanAttributes.LABEL: FanAttributes.SWING,
-        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
-        SWITCH_ON: 17920,
-        SWITCH_OFF: 0,
-    },
+    # Oscillation is part of the fan model, so the switch is removed here
+    #
+    # PhilipsApi.NEW2_SWING: {
+    #     ATTR_ICON: ICON.ROTATE,
+    #     FanAttributes.LABEL: FanAttributes.SWING,
+    #     CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+    #     SWITCH_ON: 17920,
+    #     SWITCH_OFF: 0,
+    # },
     PhilipsApi.NEW2_STANDBY_SENSORS: {
         ATTR_ICON: "mdi:power-settings",
         FanAttributes.LABEL: FanAttributes.STANDBY_SENSORS,
