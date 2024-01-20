@@ -17,7 +17,6 @@ from homeassistant.const import (
     PERCENTAGE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
     UnitOfTemperature,
-    UnitOfTime,
 )
 from homeassistant.helpers.entity import EntityCategory
 
@@ -121,6 +120,7 @@ class FanModel(StrEnum):
     AC4558 = "AC4558"
     AC5659 = "AC5659"
     AMF765 = "AMF765"
+    AMF870 = "AMF870"
     CX5120 = "CX5120"
 
 

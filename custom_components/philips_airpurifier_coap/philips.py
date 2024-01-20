@@ -1631,6 +1631,10 @@ class PhilipsAMF765(PhilipsNew2GenericCoAPFan):
     AVAILABLE_NUMBERS = [PhilipsApi.NEW2_OSCILLATION]
 
 
+class PhilipsAMF870(PhilipsAMF765):
+    """AMF870."""
+
+
 class PhilipsCX5120(PhilipsNew2GenericCoAPFan):
     """CX5120."""
 
@@ -1706,5 +1710,6 @@ model_to_class = {
     FanModel.AC4558: PhilipsAC4558,
     FanModel.AC5659: PhilipsAC5659,
     FanModel.AMF765: PhilipsAMF765,
+    FanModel.AMF870: PhilipsAMF870,
     FanModel.CX5120: PhilipsCX5120,
 }
