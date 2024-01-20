@@ -772,7 +772,7 @@ NUMBER_TYPES: dict[str, NumberDescription] = {
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         FanAttributes.UNIT: "°",
         FanAttributes.OFF: 0,
-        FanAttributes.MIN: 45,
+        FanAttributes.MIN: 30,
         FanAttributes.MAX: 350,
         FanAttributes.STEP: 5,
     },
