@@ -230,6 +230,7 @@ class FanAttributes(StrEnum):
     MODEL_ID = "model_id"
     NAME = "name"
     PM25 = "PM2.5"
+    GAS = "gas_level"
     PREFERRED_INDEX = "preferred_index"
     PRODUCT_ID = "product_id"
     RUNTIME = "runtime"
@@ -496,7 +497,7 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
     },
     PhilipsApi.NEW2_GAS: {
         FanAttributes.ICON_MAP: {0: ICON.GAS},
-        FanAttributes.LABEL: FanAttributes.PM25,
+        FanAttributes.LABEL: FanAttributes.GAS,
         FanAttributes.UNIT: CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
         ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
     },
