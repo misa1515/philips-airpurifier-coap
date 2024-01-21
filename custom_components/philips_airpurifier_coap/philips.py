@@ -1647,6 +1647,9 @@ class PhilipsAMF870(PhilipsAMFxxx):
         PhilipsApi.NEW2_HEATING,
     ]
     AVAILABLE_NUMBERS = [PhilipsApi.NEW2_TARGET_TEMP]
+    KEY_OSCILLATION = {
+        PhilipsApi.NEW2_OSCILLATION: PhilipsApi.OSCILLATION_MAP,
+    }
 
 
 class PhilipsCX5120(PhilipsNew2GenericCoAPFan):
