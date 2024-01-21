@@ -1634,6 +1634,8 @@ class PhilipsAMF765(PhilipsNew2GenericCoAPFan):
 class PhilipsAMF870(PhilipsAMF765):
     """AMF870."""
 
+    AVAILABLE_SELECTS = [PhilipsApi.NEW2_PREFERRED_INDEX]
+
 
 class PhilipsCX5120(PhilipsNew2GenericCoAPFan):
     """CX5120."""

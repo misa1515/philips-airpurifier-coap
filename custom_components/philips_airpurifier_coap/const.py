@@ -70,6 +70,8 @@ class ICON(StrEnum):
     MODE = "pap:mode"
     ROTATE = "pap:rotate"
     OSCILLATE = "pap:oscillate"
+    GAS = "pap:gas"
+    HEATING = "pap:heating"
 
 
 DATA_EXTRA_MODULE_URL = "frontend_extra_module_url"
@@ -355,6 +357,7 @@ class PhilipsApi:
     NEW2_BEEP = "D03130"
     NEW2_INDOOR_ALLERGEN_INDEX = "D03120"
     NEW2_PM25 = "D03221"
+    NEW2_GAS = "D03122"
     NEW2_HUMIDITY = "D03125"
     NEW2_FILTER_NANOPROTECT_PREFILTER = "D0520D"
     NEW2_FILTER_NANOPROTECT = "D0540E"
@@ -372,15 +375,16 @@ class PhilipsApi:
     NEW2_TARGET_TEMP = "D0310E"
     NEW2_STANDBY_SENSORS = "D03134"
     NEW2_AUTO_PLUS_AI = "D03180"
+    NEW2_PREFERRED_INDEX = "D0312A"
 
     PREFERRED_INDEX_MAP = {
-        "0": ("Indoor Allergen Index", ICON.IAI),
-        "1": ("PM2.5", ICON.PM25),
+        0: ("Indoor Allergen Index", ICON.IAI),
+        1: ("PM2.5", ICON.PM25),
     }
     GAS_PREFERRED_INDEX_MAP = {
-        "0": ("Indoor Allergen Index", ICON.IAI),
-        "1": ("PM2.5", ICON.PM25),
-        "2": ("Gas", "mdi:air"),
+        0: ("Indoor Allergen Index", ICON.IAI),
+        1: ("PM2.5", ICON.PM25),
+        2: ("Gas", ICON.GAS),
     }
     NEW_PREFERRED_INDEX_MAP = {
         "IAI": ("Indoor Allergen Index", ICON.IAI),
@@ -479,6 +483,12 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
     PhilipsApi.NEW2_PM25: {
         ATTR_DEVICE_CLASS: SensorDeviceClass.PM25,
         FanAttributes.ICON_MAP: {0: ICON.PM25},
+        FanAttributes.LABEL: FanAttributes.PM25,
+        FanAttributes.UNIT: CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+        ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
+    },
+    PhilipsApi.NEW2_GAS: {
+        FanAttributes.ICON_MAP: {0: "mdi:air"},
         FanAttributes.LABEL: FanAttributes.PM25,
         FanAttributes.UNIT: CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
         ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
@@ -741,7 +751,7 @@ SELECT_TYPES: dict[str, SelectDescription] = {
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         OPTIONS: PhilipsApi.PREFERRED_INDEX_MAP,
     },
-    PhilipsApi.PREFERRED_INDEX: {
+    PhilipsApi.NEW2_PREFERRED_INDEX: {
         FanAttributes.LABEL: FanAttributes.PREFERRED_INDEX,
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         OPTIONS: PhilipsApi.PREFERRED_INDEX_MAP,
