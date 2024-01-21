@@ -370,12 +370,13 @@ class PhilipsApi:
     NEW2_MODE_A = "D0310A"
     NEW2_MODE_B = "D0310C"
     NEW2_MODE_C = "D0310D"
-    NEW2_TIMER = "D03110"
-    NEW2_TIMER2 = "D03110"
+    NEW2_TIMER = "D03110#1"
+    NEW2_TIMER2 = "D03110#2"
     NEW2_TARGET_TEMP = "D0310E"
     NEW2_STANDBY_SENSORS = "D03134"
     NEW2_AUTO_PLUS_AI = "D03180"
-    NEW2_PREFERRED_INDEX = "D0312A"
+    NEW2_PREFERRED_INDEX = "D0312A#1"
+    NEW2_GAS_PREFERRED_INDEX = "D0312A#2"
 
     PREFERRED_INDEX_MAP = {
         0: ("Indoor Allergen Index", ICON.IAI),
@@ -751,6 +752,11 @@ SELECT_TYPES: dict[str, SelectDescription] = {
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         OPTIONS: PhilipsApi.PREFERRED_INDEX_MAP,
     },
+    PhilipsApi.NEW_PREFERRED_INDEX: {
+        FanAttributes.LABEL: FanAttributes.PREFERRED_INDEX,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        OPTIONS: PhilipsApi.NEW_PREFERRED_INDEX_MAP,
+    },
     PhilipsApi.NEW2_PREFERRED_INDEX: {
         FanAttributes.LABEL: FanAttributes.PREFERRED_INDEX,
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
@@ -761,10 +767,10 @@ SELECT_TYPES: dict[str, SelectDescription] = {
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         OPTIONS: PhilipsApi.GAS_PREFERRED_INDEX_MAP,
     },
-    PhilipsApi.NEW_PREFERRED_INDEX: {
+    PhilipsApi.NEW2_GAS_PREFERRED_INDEX: {
         FanAttributes.LABEL: FanAttributes.PREFERRED_INDEX,
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
-        OPTIONS: PhilipsApi.NEW_PREFERRED_INDEX_MAP,
+        OPTIONS: PhilipsApi.GAS_PREFERRED_INDEX_MAP,
     },
     PhilipsApi.NEW2_CIRCULATION: {
         FanAttributes.LABEL: FanAttributes.FUNCTION,
