@@ -1627,13 +1627,14 @@ class PhilipsAMFxxx(PhilipsNew2GenericCoAPFan):
         PhilipsApi.NEW2_STANDBY_SENSORS,
         PhilipsApi.NEW2_AUTO_PLUS_AI,
     ]
-    AVAILABLE_SELECTS = [PhilipsApi.NEW2_CIRCULATION, PhilipsApi.NEW2_TIMER]
+    AVAILABLE_SELECTS = [PhilipsApi.NEW2_TIMER]
     AVAILABLE_NUMBERS = [PhilipsApi.NEW2_OSCILLATION]
 
 
 class PhilipsAMF765(PhilipsAMFxxx):
     """AMF765."""
 
+    AVAILABLE_SELECTS = [PhilipsApi.NEW2_CIRCULATION]
     UNAVAILABLE_SENSORS = [PhilipsApi.NEW2_GAS]
 
 
@@ -1643,6 +1644,7 @@ class PhilipsAMF870(PhilipsAMFxxx):
     AVAILABLE_SELECTS = [
         PhilipsApi.NEW2_PREFERRED_INDEX,
         PhilipsApi.NEW2_GAS_PREFERRED_INDEX,
+        PhilipsApi.NEW2_HEATING,
     ]
 
 

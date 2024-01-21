@@ -365,7 +365,8 @@ class PhilipsApi:
     NEW2_FILTER_NANOPROTECT_TOTAL = "D05408"
     NEW2_FAN_SPEED = "D0310D"
     NEW2_SWING = "D0320F"
-    NEW2_CIRCULATION = "D0310A"
+    NEW2_CIRCULATION = "D0310A#1"
+    NEW2_HEATING = "D0310A#2"
     NEW2_OSCILLATION = "D0320F"
     NEW2_MODE_A = "D0310A"
     NEW2_MODE_B = "D0310C"
@@ -398,6 +399,11 @@ class PhilipsApi:
     CIRCULATION_MAP = {
         1: ("Fan", ICON.CLEAN),
         2: ("Circulation", ICON.CIRCULATE),
+    }
+    HEATING_MAP = {
+        1: ("Fan", ICON.CLEAN),
+        2: ("Circulation", ICON.CIRCULATE),
+        3: ("Heating", ICON.HEATING),
     }
     TIMER_MAP = {
         0: ("Off", "mdi:clock-plus"),
@@ -776,6 +782,11 @@ SELECT_TYPES: dict[str, SelectDescription] = {
         FanAttributes.LABEL: FanAttributes.FUNCTION,
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         OPTIONS: PhilipsApi.CIRCULATION_MAP,
+    },
+    PhilipsApi.NEW2_HEATING: {
+        FanAttributes.LABEL: FanAttributes.FUNCTION,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        OPTIONS: PhilipsApi.HEATING_MAP,
     },
     PhilipsApi.NEW2_TIMER: {
         FanAttributes.LABEL: FanAttributes.TIMER,
