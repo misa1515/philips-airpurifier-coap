@@ -1554,8 +1554,8 @@ class PhilipsAC5659(PhilipsGenericCoAPFan):
     AVAILABLE_SELECTS = [PhilipsApi.PREFERRED_INDEX]
 
 
-class PhilipsAMF765(PhilipsNew2GenericCoAPFan):
-    """AMF765."""
+class PhilipsAMFxxx(PhilipsNew2GenericCoAPFan):
+    """AMF family."""
 
     # REPLACE_PRESET = [PhilipsApi.NEW2_MODE_B, PhilipsApi.NEW2_FAN_SPEED]
     AVAILABLE_PRESET_MODES = {
@@ -1631,7 +1631,13 @@ class PhilipsAMF765(PhilipsNew2GenericCoAPFan):
     AVAILABLE_NUMBERS = [PhilipsApi.NEW2_OSCILLATION]
 
 
-class PhilipsAMF870(PhilipsAMF765):
+class PhilipsAMF765(PhilipsAMFxxx):
+    """AMF765."""
+
+    UNAVAILABLE_SENSORS = [PhilipsApi.NEW2_GAS]
+
+
+class PhilipsAMF870(PhilipsAMFxxx):
     """AMF870."""
 
     AVAILABLE_SELECTS = [PhilipsApi.NEW2_PREFERRED_INDEX]
@@ -1680,7 +1686,7 @@ class PhilipsCX5120(PhilipsNew2GenericCoAPFan):
 
     AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT2]
     AVAILABLE_SWITCHES = [PhilipsApi.NEW2_BEEP]
-    UNAVAILABLE_SENSORS = [PhilipsApi.NEW2_FAN_SPEED]
+    UNAVAILABLE_SENSORS = [PhilipsApi.NEW2_FAN_SPEED, PhilipsApi.NEW2_GAS]
     AVAILABLE_SELECTS = [PhilipsApi.NEW2_TIMER2]
     AVAILABLE_NUMBERS = [PhilipsApi.NEW2_TARGET_TEMP]
 
