@@ -1646,6 +1646,7 @@ class PhilipsAMF870(PhilipsAMFxxx):
         PhilipsApi.NEW2_GAS_PREFERRED_INDEX,
         PhilipsApi.NEW2_HEATING,
     ]
+    AVAILABLE_NUMBERS = [PhilipsApi.NEW2_TARGET_TEMP]
 
 
 class PhilipsCX5120(PhilipsNew2GenericCoAPFan):
