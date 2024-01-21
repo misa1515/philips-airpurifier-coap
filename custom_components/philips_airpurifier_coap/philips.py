@@ -1614,10 +1614,10 @@ class PhilipsAMF765(PhilipsNew2GenericCoAPFan):
             PhilipsApi.POWER: 1,
             PhilipsApi.NEW2_MODE_B: 10,
         },
-        PresetMode.TURBO: {
-            PhilipsApi.POWER: 1,
-            PhilipsApi.NEW2_MODE_B: 18,
-        },
+        # PresetMode.TURBO: {
+        #     PhilipsApi.POWER: 1,
+        #     PhilipsApi.NEW2_MODE_B: 18,
+        # },
     }
 
     AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT]
