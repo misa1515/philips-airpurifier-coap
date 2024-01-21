@@ -450,6 +450,8 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
             else:
                 return ordered_list_item_to_percentage(self._speeds, speed)
 
+        return None
+
     async def async_set_percentage(self, percentage: int) -> None:
         """Return the selected speed percentage."""
         if percentage == 0:
@@ -600,11 +602,11 @@ class PhilipsNew2GenericCoAPFan(PhilipsGenericCoAPFanBase):
         # (FanAttributes.ERROR_CODE, PhilipsApi.ERROR_CODE),
         # (FanAttributes.ERROR, PhilipsApi.ERROR_CODE, PhilipsApi.ERROR_CODE_MAP),
         # device configuration
-        # (
-        #     FanAttributes.PREFERRED_INDEX,
-        #     PhilipsApi.NEW_PREFERRED_INDEX,
-        #     PhilipsApi.NEW_PREFERRED_INDEX_MAP,
-        # ),
+        (
+            FanAttributes.PREFERRED_INDEX,
+            PhilipsApi.NEW2_GAS_PREFERRED_INDEX,
+            PhilipsApi.GAS_PREFERRED_INDEX_MAP,
+        ),
         # device sensors
         (
             FanAttributes.RUNTIME,
