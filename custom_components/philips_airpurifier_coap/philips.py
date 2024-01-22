@@ -391,15 +391,28 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
     @property
     def preset_mode(self) -> Optional[str]:
         """Return the selected preset mode."""
+        _LOGGER.debug("fan %s preset mode requested", self._attr_name)
         for preset_mode, status_pattern in self._available_preset_modes.items():
+            _LOGGER.debug(
+                "  testing preset mode '%s' with status pattern: %s",
+                preset_mode,
+                status_pattern,
+            )
             for k, v in status_pattern.items():
+                _LOGGER.debug("    checking key, value pair: %s - %s", k, v)
                 # check if the speed sensor also used for presets is different from the setting field
                 if self.REPLACE_PRESET is not None and k == self.REPLACE_PRESET[0]:
                     k = self.REPLACE_PRESET[1]
-                if self._device_status.get(k) != v:
+                status = self._device_status.get(k)
+                _LOGGER.debug("    status is: %s", status)
+                if status != v:
+                    _LOGGER.debug("    status doesn't match value, stop trying")
                     break
             else:
+                _LOGGER.debug("  found preset mode: %s", preset_mode)
                 return preset_mode
+
+        _LOGGER.debug("  nothing found, sorry")
 
     async def async_set_preset_mode(self, preset_mode: str) -> None:
         """Set the preset mode of the fan."""
@@ -1562,72 +1575,72 @@ class PhilipsAMFxxx(PhilipsNew2GenericCoAPFan):
     # REPLACE_PRESET = [PhilipsApi.NEW2_MODE_B, PhilipsApi.NEW2_FAN_SPEED]
     AVAILABLE_PRESET_MODES = {
         PresetMode.AUTO: {
-            PhilipsApi.POWER: "1",
-            PhilipsApi.NEW2_MODE_B: "0",
-            PhilipsApi.NEW2_MODE_C: "3",
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 0,
+            PhilipsApi.NEW2_MODE_C: 3,
         },
         PresetMode.SLEEP: {
-            PhilipsApi.POWER: "1",
-            PhilipsApi.NEW2_MODE_B: "17",
-            PhilipsApi.NEW2_MODE_C: "1",
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 17,
+            PhilipsApi.NEW2_MODE_C: 1,
         },
         PresetMode.TURBO: {
-            PhilipsApi.POWER: "1",
-            PhilipsApi.NEW2_MODE_B: "18",
-            PhilipsApi.NEW2_MODE_C: "18",
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 18,
+            PhilipsApi.NEW2_MODE_C: 18,
         },
     }
     # REPLACE_SPEED = [PhilipsApi.NEW2_MODE_B, PhilipsApi.NEW2_FAN_SPEED]
     AVAILABLE_SPEEDS = {
         PresetMode.SPEED_1: {
-            PhilipsApi.POWER: "1",
-            PhilipsApi.NEW2_MODE_B: "1",
-            PhilipsApi.NEW2_MODE_C: "1",
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 1,
+            PhilipsApi.NEW2_MODE_C: 1,
         },
         PresetMode.SPEED_2: {
-            PhilipsApi.POWER: "1",
-            PhilipsApi.NEW2_MODE_B: "2",
-            PhilipsApi.NEW2_MODE_C: "2",
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 2,
+            PhilipsApi.NEW2_MODE_C: 2,
         },
         PresetMode.SPEED_3: {
-            PhilipsApi.POWER: "1",
-            PhilipsApi.NEW2_MODE_B: "3",
-            PhilipsApi.NEW2_MODE_C: "3",
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 3,
+            PhilipsApi.NEW2_MODE_C: 3,
         },
         PresetMode.SPEED_4: {
-            PhilipsApi.POWER: "1",
-            PhilipsApi.NEW2_MODE_B: "4",
-            PhilipsApi.NEW2_MODE_C: "4",
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 4,
+            PhilipsApi.NEW2_MODE_C: 4,
         },
         PresetMode.SPEED_5: {
-            PhilipsApi.POWER: "1",
-            PhilipsApi.NEW2_MODE_B: "5",
-            PhilipsApi.NEW2_MODE_C: "5",
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 5,
+            PhilipsApi.NEW2_MODE_C: 5,
         },
         PresetMode.SPEED_6: {
-            PhilipsApi.POWER: "1",
-            PhilipsApi.NEW2_MODE_B: "6",
-            PhilipsApi.NEW2_MODE_C: "6",
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 6,
+            PhilipsApi.NEW2_MODE_C: 6,
         },
         PresetMode.SPEED_7: {
-            PhilipsApi.POWER: "1",
-            PhilipsApi.NEW2_MODE_B: "7",
-            PhilipsApi.NEW2_MODE_C: "7",
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 7,
+            PhilipsApi.NEW2_MODE_C: 7,
         },
         PresetMode.SPEED_8: {
-            PhilipsApi.POWER: "1",
-            PhilipsApi.NEW2_MODE_B: "8",
-            PhilipsApi.NEW2_MODE_C: "8",
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 8,
+            PhilipsApi.NEW2_MODE_C: 8,
         },
         PresetMode.SPEED_9: {
-            PhilipsApi.POWER: "1",
-            PhilipsApi.NEW2_MODE_B: "9",
-            PhilipsApi.NEW2_MODE_C: "9",
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 9,
+            PhilipsApi.NEW2_MODE_C: 9,
         },
         PresetMode.SPEED_10: {
-            PhilipsApi.POWER: "1",
-            PhilipsApi.NEW2_MODE_B: "10",
-            PhilipsApi.NEW2_MODE_C: "10",
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 10,
+            PhilipsApi.NEW2_MODE_C: 10,
         },
         # PresetMode.TURBO: {
         #     PhilipsApi.POWER: 1,
