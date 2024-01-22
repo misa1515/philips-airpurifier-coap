@@ -1657,7 +1657,6 @@ class PhilipsAMF870(PhilipsAMFxxx):
     """AMF870."""
 
     AVAILABLE_SELECTS = [
-        PhilipsApi.NEW2_PREFERRED_INDEX,
         PhilipsApi.NEW2_GAS_PREFERRED_INDEX,
         PhilipsApi.NEW2_HEATING,
     ]
