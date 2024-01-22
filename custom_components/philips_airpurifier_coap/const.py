@@ -498,7 +498,6 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
     PhilipsApi.NEW2_GAS: {
         FanAttributes.ICON_MAP: {0: ICON.GAS},
         FanAttributes.LABEL: FanAttributes.GAS,
-        FanAttributes.UNIT: CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
         ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
     },
     PhilipsApi.TOTAL_VOLATILE_ORGANIC_COMPOUNDS: {
