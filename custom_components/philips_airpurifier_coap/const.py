@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from enum import StrEnum
 
-from homeassistant.components.number.const import NumberDeviceClass
+from homeassistant.components.number import NumberDeviceClass
 from homeassistant.components.sensor import (
     ATTR_STATE_CLASS,
     SensorDeviceClass,
