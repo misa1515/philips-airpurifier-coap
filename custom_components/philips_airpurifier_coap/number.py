@@ -88,9 +88,9 @@ class PhilipsNumber(PhilipsEntity, NumberEntity):
             FanAttributes.UNIT
         )
 
-        self._attr_native_min = self._description.get(FanAttributes.OFF)
+        self._attr_native_min_value = self._description.get(FanAttributes.OFF)
         self._min = self._description.get(FanAttributes.MIN)
-        self._attr_native_max = self._description.get(FanAttributes.MAX)
+        self._attr_native_max_value = self._description.get(FanAttributes.MAX)
         self._attr_native_step = self._description.get(FanAttributes.STEP)
 
         try:
@@ -114,14 +114,14 @@ class PhilipsNumber(PhilipsEntity, NumberEntity):
         _LOGGER.debug("async_set_native_value called with: %s", value)
 
         # Catch the boundaries
-        if value is None or value < self._attr_native_min:
-            value = self._attr_native_min
+        if value is None or value < self._attr_native_min_value:
+            value = self._attr_native_min_value
         if value % self._attr_native_step > 0:
             value = value // self._attr_native_step * self._attr_native_step
         if value > 0 and value < self._min:
             value = self._min
-        if value > self._attr_native_max:
-            value = self._attr_native_max
+        if value > self._attr_native_max_value:
+            value = self._attr_native_max_value
 
         _LOGGER.debug("setting number with: %s", value)
 
