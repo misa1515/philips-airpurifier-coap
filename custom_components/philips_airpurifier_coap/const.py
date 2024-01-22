@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from enum import StrEnum
 
+from homeassistant.components.number.const import NumberDeviceClass
 from homeassistant.components.sensor import (
     ATTR_STATE_CLASS,
     SensorDeviceClass,
@@ -815,7 +816,8 @@ NUMBER_TYPES: dict[str, NumberDescription] = {
         FanAttributes.LABEL: FanAttributes.TARGET_TEMP,
         ATTR_ICON: "mdi:thermometer",
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
-        FanAttributes.UNIT: "°",
+        ATTR_DEVICE_CLASS: NumberDeviceClass.TEMPERATURE,
+        FanAttributes.UNIT: "°C",
         FanAttributes.OFF: 1,
         FanAttributes.MIN: 1,
         FanAttributes.MAX: 37,
