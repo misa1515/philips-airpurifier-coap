@@ -1577,16 +1577,16 @@ class PhilipsAMFxxx(PhilipsNew2GenericCoAPFan):
 
     # REPLACE_PRESET = [PhilipsApi.NEW2_MODE_B, PhilipsApi.NEW2_FAN_SPEED]
     AVAILABLE_PRESET_MODES = {
-        PresetMode.AUTO_PLUS: {
-            PhilipsApi.NEW2_POWER: 1,
-            PhilipsApi.NEW2_MODE_B: 0,
-            PhilipsApi.NEW2_AUTO_PLUS_AI: 1,
-            # PhilipsApi.NEW2_MODE_C: 3,
-        },
+        # PresetMode.AUTO_PLUS: {
+        #     PhilipsApi.NEW2_POWER: 1,
+        #     PhilipsApi.NEW2_MODE_B: 0,
+        #     PhilipsApi.NEW2_AUTO_PLUS_AI: 1,
+        #     # PhilipsApi.NEW2_MODE_C: 3,
+        # },
         PresetMode.AUTO: {
             PhilipsApi.NEW2_POWER: 1,
             PhilipsApi.NEW2_MODE_B: 0,
-            PhilipsApi.NEW2_AUTO_PLUS_AI: 0,
+            # PhilipsApi.NEW2_AUTO_PLUS_AI: 0,
             # PhilipsApi.NEW2_MODE_C: 3,
         },
         PresetMode.SLEEP: {

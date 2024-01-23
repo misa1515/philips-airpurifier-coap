@@ -695,12 +695,12 @@ SWITCH_TYPES: dict[str, SwitchDescription] = {
         SWITCH_ON: 1,
         SWITCH_OFF: 0,
     },
-    # PhilipsApi.NEW2_AUTO_PLUS_AI: {
-    #     ATTR_ICON: "mdi:format-annotation-plus",
-    #     FanAttributes.LABEL: FanAttributes.AUTO_PLUS,
-    #     SWITCH_ON: 1,
-    #     SWITCH_OFF: 0,
-    # },
+    PhilipsApi.NEW2_AUTO_PLUS_AI: {
+        ATTR_ICON: "mdi:format-annotation-plus",
+        FanAttributes.LABEL: FanAttributes.AUTO_PLUS,
+        SWITCH_ON: 1,
+        SWITCH_OFF: 0,
+    },
 }
 
 LIGHT_TYPES: dict[str, LightDescription] = {
