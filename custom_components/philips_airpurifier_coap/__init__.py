@@ -32,7 +32,7 @@ from .philips import Coordinator
 _LOGGER = logging.getLogger(__name__)
 
 
-PLATFORMS = ["fan", "sensor", "switch", "light", "select"]
+PLATFORMS = ["fan", "sensor", "switch", "light", "select", "number"]
 
 
 # icons code thanks to Thomas Loven:

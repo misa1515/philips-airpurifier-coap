@@ -23,6 +23,7 @@ from homeassistant.util.percentage import (
 from .const import (
     DOMAIN,
     ICON,
+    SWITCH_OFF,
     SWITCH_ON,
     FanAttributes,
     FanModel,
@@ -183,7 +184,10 @@ class PhilipsEntity(Entity):
         self._name = list(
             filter(
                 None,
-                map(coordinator.status.get, [PhilipsApi.NAME, PhilipsApi.NEW_NAME]),
+                map(
+                    coordinator.status.get,
+                    [PhilipsApi.NAME, PhilipsApi.NEW_NAME, PhilipsApi.NEW2_NAME],
+                ),
             )
         )[0]
         # self._modelName = coordinator.status["modelid"]
@@ -192,7 +196,11 @@ class PhilipsEntity(Entity):
                 None,
                 map(
                     coordinator.status.get,
-                    [PhilipsApi.MODEL_ID, PhilipsApi.NEW_MODEL_ID],
+                    [
+                        PhilipsApi.MODEL_ID,
+                        PhilipsApi.NEW_MODEL_ID,
+                        PhilipsApi.NEW2_MODEL_ID,
+                    ],
                 ),
             )
         )[0]
@@ -272,14 +280,19 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
     """Class as basis to manage a generic Philips CoAP fan."""
 
     AVAILABLE_PRESET_MODES = {}
+    REPLACE_PRESET = None
     AVAILABLE_SPEEDS = {}
+    REPLACE_SPEED = None
     AVAILABLE_ATTRIBUTES = []
     AVAILABLE_SWITCHES = []
     AVAILABLE_LIGHTS = []
+    AVAILABLE_NUMBERS = []
 
     KEY_PHILIPS_POWER = PhilipsApi.POWER
     STATE_POWER_ON = "1"
     STATE_POWER_OFF = "0"
+
+    KEY_OSCILLATION = None
 
     def __init__(  # noqa: D107
         self,
@@ -366,6 +379,8 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
         features = FanEntityFeature.PRESET_MODE
         if self._speeds:
             features |= FanEntityFeature.SET_SPEED
+        if self.KEY_OSCILLATION is not None:
+            features |= FanEntityFeature.OSCILLATE
         return features
 
     @property
@@ -378,7 +393,11 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
         """Return the selected preset mode."""
         for preset_mode, status_pattern in self._available_preset_modes.items():
             for k, v in status_pattern.items():
-                if self._device_status.get(k) != v:
+                # check if the speed sensor also used for presets is different from the setting field
+                if self.REPLACE_PRESET is not None and k == self.REPLACE_PRESET[0]:
+                    k = self.REPLACE_PRESET[1]
+                status = self._device_status.get(k)
+                if status != v:
                     break
             else:
                 return preset_mode
@@ -395,14 +414,44 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
         return len(self._speeds)
 
     @property
+    def oscillating(self) -> bool | None:
+        """Return if the fan is oscillating."""
+        if self.KEY_OSCILLATION is None:
+            return None
+
+        key = next(iter(self.KEY_OSCILLATION))
+        status = self._device_status.get(key)
+        on = self.KEY_OSCILLATION.get(key).get(SWITCH_ON)
+        return status is not None and status == on
+
+    async def async_oscillate(self, oscillating: bool) -> None:
+        """Osciallate the fan."""
+        if self.KEY_OSCILLATION is None:
+            return None
+
+        key = next(iter(self.KEY_OSCILLATION))
+        values = self.KEY_OSCILLATION.get(key)
+        on = values.get(SWITCH_ON)
+        off = values.get(SWITCH_OFF)
+        if oscillating:
+            await self.coordinator.client.set_control_value(key, on)
+        else:
+            await self.coordinator.client.set_control_value(key, off)
+
+    @property
     def percentage(self) -> Optional[int]:
         """Return the speed percentages."""
         for speed, status_pattern in self._available_speeds.items():
             for k, v in status_pattern.items():
+                # check if the speed sensor is different from the speed setting field
+                if self.REPLACE_SPEED is not None and k == self.REPLACE_SPEED[0]:
+                    k = self.REPLACE_SPEED[1]
                 if self._device_status.get(k) != v:
                     break
             else:
                 return ordered_list_item_to_percentage(self._speeds, speed)
+
+        return None
 
     async def async_set_percentage(self, percentage: int) -> None:
         """Return the selected speed percentage."""
@@ -535,6 +584,45 @@ class PhilipsNewGenericCoAPFan(PhilipsGenericCoAPFanBase):
     KEY_PHILIPS_POWER = PhilipsApi.NEW_POWER
     STATE_POWER_ON = "ON"
     STATE_POWER_OFF = "OFF"
+
+
+class PhilipsNew2GenericCoAPFan(PhilipsGenericCoAPFanBase):
+    """Class to manage another new generic CoAP fan."""
+
+    AVAILABLE_PRESET_MODES = {}
+    AVAILABLE_SPEEDS = {}
+
+    AVAILABLE_ATTRIBUTES = [
+        # device information
+        (FanAttributes.NAME, PhilipsApi.NEW2_NAME),
+        (FanAttributes.MODEL_ID, PhilipsApi.NEW2_MODEL_ID),
+        (FanAttributes.PRODUCT_ID, PhilipsApi.PRODUCT_ID),
+        (FanAttributes.DEVICE_ID, PhilipsApi.DEVICE_ID),
+        (FanAttributes.SOFTWARE_VERSION, PhilipsApi.NEW2_SOFTWARE_VERSION),
+        (FanAttributes.WIFI_VERSION, PhilipsApi.WIFI_VERSION),
+        # (FanAttributes.ERROR_CODE, PhilipsApi.ERROR_CODE),
+        # (FanAttributes.ERROR, PhilipsApi.ERROR_CODE, PhilipsApi.ERROR_CODE_MAP),
+        # device configuration
+        (
+            FanAttributes.PREFERRED_INDEX,
+            PhilipsApi.NEW2_GAS_PREFERRED_INDEX,
+            PhilipsApi.GAS_PREFERRED_INDEX_MAP,
+        ),
+        # device sensors
+        (
+            FanAttributes.RUNTIME,
+            PhilipsApi.RUNTIME,
+            lambda x, _: str(timedelta(seconds=round(x / 1000))),
+        ),
+    ]
+
+    AVAILABLE_LIGHTS = []
+    AVAILABLE_SWITCHES = []
+    AVAILABLE_SELECTS = []
+
+    KEY_PHILIPS_POWER = PhilipsApi.NEW2_POWER
+    STATE_POWER_ON = 1
+    STATE_POWER_OFF = 0
 
 
 class PhilipsHumidifierMixin(PhilipsGenericCoAPFanBase):
@@ -1468,6 +1556,168 @@ class PhilipsAC5659(PhilipsGenericCoAPFan):
     AVAILABLE_SELECTS = [PhilipsApi.PREFERRED_INDEX]
 
 
+class PhilipsAMFxxx(PhilipsNew2GenericCoAPFan):
+    """AMF family."""
+
+    # REPLACE_PRESET = [PhilipsApi.NEW2_MODE_B, PhilipsApi.NEW2_FAN_SPEED]
+    AVAILABLE_PRESET_MODES = {
+        # PresetMode.AUTO_PLUS: {
+        #     PhilipsApi.NEW2_POWER: 1,
+        #     PhilipsApi.NEW2_MODE_B: 0,
+        #     PhilipsApi.NEW2_AUTO_PLUS_AI: 1,
+        #     # PhilipsApi.NEW2_MODE_C: 3,
+        # },
+        PresetMode.AUTO: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 0,
+            # PhilipsApi.NEW2_AUTO_PLUS_AI: 0,
+            # PhilipsApi.NEW2_MODE_C: 3,
+        },
+        PresetMode.SLEEP: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 17,
+            # PhilipsApi.NEW2_MODE_C: 1,
+        },
+        PresetMode.TURBO: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 18,
+            # PhilipsApi.NEW2_MODE_C: 18,
+        },
+    }
+    # REPLACE_SPEED = [PhilipsApi.NEW2_MODE_B, PhilipsApi.NEW2_FAN_SPEED]
+    AVAILABLE_SPEEDS = {
+        PresetMode.SPEED_1: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 1,
+            # PhilipsApi.NEW2_MODE_C: 1,
+        },
+        PresetMode.SPEED_2: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 2,
+            # PhilipsApi.NEW2_MODE_C: 2,
+        },
+        PresetMode.SPEED_3: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 3,
+            # PhilipsApi.NEW2_MODE_C: 3,
+        },
+        PresetMode.SPEED_4: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 4,
+            # PhilipsApi.NEW2_MODE_C: 4,
+        },
+        PresetMode.SPEED_5: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 5,
+            # PhilipsApi.NEW2_MODE_C: 5,
+        },
+        PresetMode.SPEED_6: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 6,
+            # PhilipsApi.NEW2_MODE_C: 6,
+        },
+        PresetMode.SPEED_7: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 7,
+            # PhilipsApi.NEW2_MODE_C: 7,
+        },
+        PresetMode.SPEED_8: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 8,
+            # PhilipsApi.NEW2_MODE_C: 8,
+        },
+        PresetMode.SPEED_9: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 9,
+            # PhilipsApi.NEW2_MODE_C: 9,
+        },
+        PresetMode.SPEED_10: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 10,
+            # PhilipsApi.NEW2_MODE_C: 10,
+        },
+        # PresetMode.TURBO: {
+        #     PhilipsApi.NEW2_POWER: 1,
+        #     PhilipsApi.NEW2_MODE_B: 18,
+        # },
+    }
+
+    AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT]
+    AVAILABLE_SWITCHES = [
+        PhilipsApi.NEW2_CHILD_LOCK,
+        PhilipsApi.NEW2_BEEP,
+        PhilipsApi.NEW2_STANDBY_SENSORS,
+        PhilipsApi.NEW2_AUTO_PLUS_AI,
+    ]
+    AVAILABLE_SELECTS = [PhilipsApi.NEW2_TIMER]
+    AVAILABLE_NUMBERS = [PhilipsApi.NEW2_OSCILLATION]
+
+
+class PhilipsAMF765(PhilipsAMFxxx):
+    """AMF765."""
+
+    AVAILABLE_SELECTS = [PhilipsApi.NEW2_CIRCULATION]
+    UNAVAILABLE_SENSORS = [PhilipsApi.NEW2_GAS]
+
+
+class PhilipsAMF870(PhilipsAMFxxx):
+    """AMF870."""
+
+    AVAILABLE_SELECTS = [
+        PhilipsApi.NEW2_GAS_PREFERRED_INDEX,
+        PhilipsApi.NEW2_HEATING,
+    ]
+    AVAILABLE_NUMBERS = [PhilipsApi.NEW2_TARGET_TEMP]
+
+
+class PhilipsCX5120(PhilipsNew2GenericCoAPFan):
+    """CX5120."""
+
+    AVAILABLE_PRESET_MODES = {
+        PresetMode.AUTO: {
+            PhilipsApi.NEW2_POWER: "1",
+            PhilipsApi.NEW2_MODE_A: "3",
+            PhilipsApi.NEW2_MODE_B: "0",
+        },
+        PresetMode.HIGH: {
+            PhilipsApi.POWER: "1",
+            PhilipsApi.NEW2_MODE_A: "3",
+            PhilipsApi.NEW2_MODE_B: "65",
+        },
+        PresetMode.LOW: {
+            PhilipsApi.POWER: "1",
+            PhilipsApi.NEW2_MODE_A: "3",
+            PhilipsApi.NEW2_MODE_B: "66",
+        },
+        PresetMode.VENTILATION: {
+            PhilipsApi.POWER: "1",
+            PhilipsApi.NEW2_MODE_A: "1",
+            PhilipsApi.NEW2_MODE_B: "-127",
+        },
+    }
+    AVAILABLE_SPEEDS = {
+        PresetMode.HIGH: {
+            PhilipsApi.POWER: "1",
+            PhilipsApi.NEW2_MODE_A: "3",
+            PhilipsApi.NEW2_MODE_B: "65",
+        },
+        PresetMode.LOW: {
+            PhilipsApi.POWER: "1",
+            PhilipsApi.NEW2_MODE_A: "3",
+            PhilipsApi.NEW2_MODE_B: "66",
+        },
+    }
+    KEY_OSCILLATION = {
+        PhilipsApi.NEW2_OSCILLATION: PhilipsApi.OSCILLATION_MAP,
+    }
+
+    AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT2]
+    AVAILABLE_SWITCHES = [PhilipsApi.NEW2_BEEP]
+    UNAVAILABLE_SENSORS = [PhilipsApi.NEW2_FAN_SPEED, PhilipsApi.NEW2_GAS]
+    AVAILABLE_SELECTS = [PhilipsApi.NEW2_TIMER2]
+    AVAILABLE_NUMBERS = [PhilipsApi.NEW2_TARGET_TEMP]
+
+
 model_to_class = {
     FanModel.AC0850: PhilipsAC0850,
     FanModel.AC1214: PhilipsAC1214,
@@ -1494,4 +1744,7 @@ model_to_class = {
     FanModel.AC4550: PhilipsAC4550,
     FanModel.AC4558: PhilipsAC4558,
     FanModel.AC5659: PhilipsAC5659,
+    FanModel.AMF765: PhilipsAMF765,
+    FanModel.AMF870: PhilipsAMF870,
+    FanModel.CX5120: PhilipsCX5120,
 }
