@@ -391,31 +391,16 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
     @property
     def preset_mode(self) -> Optional[str]:
         """Return the selected preset mode."""
-        _LOGGER.debug("fan %s preset mode requested", self._name)
         for preset_mode, status_pattern in self._available_preset_modes.items():
-            _LOGGER.debug(
-                "  testing preset mode '%s' with status pattern: %s",
-                preset_mode,
-                status_pattern,
-            )
             for k, v in status_pattern.items():
-                _LOGGER.debug("    checking key, value pair: %s - %s", k, v)
-                _LOGGER.debug("      value is of type: %s", type(v))
                 # check if the speed sensor also used for presets is different from the setting field
                 if self.REPLACE_PRESET is not None and k == self.REPLACE_PRESET[0]:
                     k = self.REPLACE_PRESET[1]
                 status = self._device_status.get(k)
-                _LOGGER.debug("    status is: %s", status)
-                _LOGGER.debug("      status is of type: %s", type(status))
                 if status != v:
-                    _LOGGER.debug("    status doesn't match value, stop trying")
                     break
-                _LOGGER.debug("      match!")
             else:
-                _LOGGER.debug("  found preset mode: %s", preset_mode)
                 return preset_mode
-
-        _LOGGER.debug("  nothing found, sorry")
 
     async def async_set_preset_mode(self, preset_mode: str) -> None:
         """Set the preset mode of the fan."""
