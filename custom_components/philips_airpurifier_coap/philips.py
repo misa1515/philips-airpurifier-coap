@@ -1675,36 +1675,36 @@ class PhilipsCX5120(PhilipsNew2GenericCoAPFan):
 
     AVAILABLE_PRESET_MODES = {
         PresetMode.AUTO: {
-            PhilipsApi.NEW2_POWER: "1",
-            PhilipsApi.NEW2_MODE_A: "3",
-            PhilipsApi.NEW2_MODE_B: "0",
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 3,
+            PhilipsApi.NEW2_MODE_B: 0,
         },
         PresetMode.HIGH: {
-            PhilipsApi.POWER: "1",
-            PhilipsApi.NEW2_MODE_A: "3",
-            PhilipsApi.NEW2_MODE_B: "65",
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 3,
+            PhilipsApi.NEW2_MODE_B: 65,
         },
         PresetMode.LOW: {
-            PhilipsApi.POWER: "1",
-            PhilipsApi.NEW2_MODE_A: "3",
-            PhilipsApi.NEW2_MODE_B: "66",
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 3,
+            PhilipsApi.NEW2_MODE_B: 66,
         },
         PresetMode.VENTILATION: {
-            PhilipsApi.POWER: "1",
-            PhilipsApi.NEW2_MODE_A: "1",
-            PhilipsApi.NEW2_MODE_B: "-127",
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 1,
+            PhilipsApi.NEW2_MODE_B: -127,
         },
     }
     AVAILABLE_SPEEDS = {
         PresetMode.HIGH: {
-            PhilipsApi.POWER: "1",
-            PhilipsApi.NEW2_MODE_A: "3",
-            PhilipsApi.NEW2_MODE_B: "65",
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 3,
+            PhilipsApi.NEW2_MODE_B: 65,
         },
         PresetMode.LOW: {
-            PhilipsApi.POWER: "1",
-            PhilipsApi.NEW2_MODE_A: "3",
-            PhilipsApi.NEW2_MODE_B: "66",
+            PhilipsApi.POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 3,
+            PhilipsApi.NEW2_MODE_B: 66,
         },
     }
     KEY_OSCILLATION = {
