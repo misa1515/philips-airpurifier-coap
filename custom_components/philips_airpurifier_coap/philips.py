@@ -1398,6 +1398,10 @@ class PhilipsAC385851(PhilipsAC385x51):
     """AC3858/51."""
 
 
+class PhilipsAC385886(PhilipsAC385x51):
+    """AC3858/86."""
+
+
 class PhilipsAC4236(PhilipsGenericCoAPFan):
     """AC4236."""
 
@@ -1740,6 +1744,7 @@ model_to_class = {
     FanModel.AC3854_51: PhilipsAC385451,
     FanModel.AC3858_50: PhilipsAC385850,
     FanModel.AC3858_51: PhilipsAC385851,
+    FanModel.AC3858_86: PhilipsAC385886,
     FanModel.AC4236: PhilipsAC4236,
     FanModel.AC4550: PhilipsAC4550,
     FanModel.AC4558: PhilipsAC4558,
