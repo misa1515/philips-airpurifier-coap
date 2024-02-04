@@ -51,19 +51,22 @@ async def async_setup_entry(  # noqa: D103
     coordinator = data[DATA_KEY_COORDINATOR]
     status = coordinator.status
 
-    sensors = []
-
-    for sensor in SENSOR_TYPES:
-        if sensor in status:
-            sensors.append(PhilipsSensor(coordinator, name, model, sensor))
-
     model_class = model_to_class.get(model)
     unavailable_filters = []
+    unavailable_sensors = []
 
     if model_class:
         for cls in reversed(model_class.__mro__):
             cls_unavailable_filters = getattr(cls, "UNAVAILABLE_FILTERS", [])
             unavailable_filters.extend(cls_unavailable_filters)
+            cls_unavailable_sensors = getattr(cls, "UNAVAILABLE_SENSORS", [])
+            unavailable_sensors.extend(cls_unavailable_sensors)
+
+    sensors = []
+
+    for sensor in SENSOR_TYPES:
+        if sensor in status and sensor not in unavailable_sensors:
+            sensors.append(PhilipsSensor(coordinator, name, model, sensor))
 
     for _filter in FILTER_TYPES:
         if _filter in status and _filter not in unavailable_filters:

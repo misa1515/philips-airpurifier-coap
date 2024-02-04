@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from enum import StrEnum
 
+from homeassistant.components.number import NumberDeviceClass
 from homeassistant.components.sensor import (
     ATTR_STATE_CLASS,
     SensorDeviceClass,
@@ -17,13 +18,13 @@ from homeassistant.const import (
     PERCENTAGE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
     UnitOfTemperature,
-    UnitOfTime,
 )
 from homeassistant.helpers.entity import EntityCategory
 
 from .model import (
     FilterDescription,
     LightDescription,
+    NumberDescription,
     SelectDescription,
     SensorDescription,
     SwitchDescription,
@@ -62,8 +63,16 @@ class ICON(StrEnum):
     WATER_REFILL = "pap:water_refill"
     PREFILTER_CLEANING = "pap:prefilter_cleaning"
     PREFILTER_WICK_CLEANING = "pap:prefilter_wick_cleaning"
-    PM25 = "pap:pm25"
+    PM25 = "pap:pm25b"
     IAI = "pap:iai"
+    # PM25B = "pap:pm25b"
+    CIRCULATE = "pap:circulate"
+    CLEAN = "pap:clean"
+    MODE = "pap:mode"
+    ROTATE = "pap:rotate"
+    OSCILLATE = "pap:oscillate"
+    GAS = "pap:gas"
+    HEATING = "pap:heating"
 
 
 DATA_EXTRA_MODULE_URL = "frontend_extra_module_url"
@@ -109,10 +118,14 @@ class FanModel(StrEnum):
     AC3854_51 = "AC3854/51"
     AC3858_50 = "AC3858/50"
     AC3858_51 = "AC3858/51"
+    AC3858_86 = "AC3858/86"
     AC4236 = "AC4236"
     AC4550 = "AC4550"
     AC4558 = "AC4558"
     AC5659 = "AC5659"
+    AMF765 = "AMF765"
+    AMF870 = "AMF870"
+    CX5120 = "CX5120"
 
 
 class PresetMode:
@@ -122,9 +135,17 @@ class PresetMode:
     SPEED_GENTLE_1 = "gentle/speed 1"
     SPEED_2 = "speed 2"
     SPEED_3 = "speed 3"
+    SPEED_4 = "speed 4"
+    SPEED_5 = "speed 5"
+    SPEED_6 = "speed 6"
+    SPEED_7 = "speed 7"
+    SPEED_8 = "spped 8"
+    SPEED_9 = "spped 9"
+    SPEED_10 = "speed 10"
     ALLERGEN = "allergen"
     AUTO = "auto"
     AUTO_GENERAL = "auto general"
+    AUTO_PLUS = "auto+"
     BACTERIA = "bacteria"
     GENTLE = "gentle"
     NIGHT = "night"
@@ -133,6 +154,9 @@ class PresetMode:
     TURBO = "turbo"
     GAS = "gas"
     POLLUTION = "pollution"
+    LOW = "low"
+    HIGH = "high"
+    VENTILATION = "ventilation"
 
     ICON_MAP = {
         ALLERGEN: ICON.ALLERGEN_MODE,
@@ -177,8 +201,10 @@ class FanService(StrEnum):
 class FanAttributes(StrEnum):
     """The attributes of a fan."""
 
+    ACTUAL_FAN_SPEED = "actual_fan_speed"
     AIR_QUALITY_INDEX = "air_quality_index"
     CHILD_LOCK = "child_lock"
+    BEEP = "beep"
     DEVICE_ID = "device_id"
     DEVICE_VERSION = "device_version"
     DISPLAY_BACKLIGHT = "display_backlight"
@@ -207,6 +233,7 @@ class FanAttributes(StrEnum):
     MODEL_ID = "model_id"
     NAME = "name"
     PM25 = "PM2.5"
+    GAS = "gas_level"
     PREFERRED_INDEX = "preferred_index"
     PRODUCT_ID = "product_id"
     RUNTIME = "runtime"
@@ -221,6 +248,18 @@ class FanAttributes(StrEnum):
     WARN_VALUE = "warn_value"
     WARN_ICON = "warn_icon"
     RSSI = "rssi"
+    SWING = "swing"
+    TURBO = "turbo"
+    OSCILLATION = "oscillation"
+    VALUE_LIST = "value_list"
+    OFF = "off"
+    MIN = "min"
+    MAX = "max"
+    STEP = "step"
+    TIMER = "timer"
+    TARGET_TEMP = "target_temperature"
+    STANDBY_SENSORS = "standby_sensors"
+    AUTO_PLUS = "auto_plus"
 
 
 class FanUnits(StrEnum):
@@ -293,6 +332,12 @@ class PhilipsApi:
         SWITCH_ON: "1",
         SWITCH_OFF: "0",
     }
+
+    OSCILLATION_MAP = {
+        SWITCH_ON: "17920",
+        SWITCH_OFF: "0",
+    }
+
     # the AC1715 seems to follow a new scheme, this should later be refactored
     NEW_NAME = "D01-03"
     NEW_MODEL_ID = "D01-05"
@@ -305,14 +350,48 @@ class PhilipsApi:
     NEW_PM25 = "D03-33"
     NEW_PREFERRED_INDEX = "D03-42"
 
+    # there is a third generation of devices with yet another scheme
+    NEW2_NAME = "D01S03"
+    NEW2_MODEL_ID = "D01S05"
+    NEW2_POWER = "D03102"
+    NEW2_DISPLAY_BACKLIGHT = "D0312D"
+    NEW2_DISPLAY_BACKLIGHT2 = "D03105"
+    NEW2_TEMPERATURE = "D03224"
+    NEW2_SOFTWARE_VERSION = "D01S12"
+    NEW2_CHILD_LOCK = "D03103"
+    NEW2_BEEP = "D03130"
+    NEW2_INDOOR_ALLERGEN_INDEX = "D03120"
+    NEW2_PM25 = "D03221"
+    NEW2_GAS = "D03122"
+    NEW2_HUMIDITY = "D03125"
+    NEW2_FILTER_NANOPROTECT_PREFILTER = "D0520D"
+    NEW2_FILTER_NANOPROTECT = "D0540E"
+    NEW2_FILTER_NANOPROTECT_PREFILTER_TOTAL = "D05207"
+    NEW2_FILTER_NANOPROTECT_TOTAL = "D05408"
+    NEW2_FAN_SPEED = "D0310D"
+    NEW2_SWING = "D0320F"
+    NEW2_CIRCULATION = "D0310A#1"
+    NEW2_HEATING = "D0310A#2"
+    NEW2_OSCILLATION = "D0320F"
+    NEW2_MODE_A = "D0310A"
+    NEW2_MODE_B = "D0310C"
+    NEW2_MODE_C = "D0310D"
+    NEW2_TIMER = "D03110#1"
+    NEW2_TIMER2 = "D03110#2"
+    NEW2_TARGET_TEMP = "D0310E"
+    NEW2_STANDBY_SENSORS = "D03134"
+    NEW2_AUTO_PLUS_AI = "D03180"
+    NEW2_PREFERRED_INDEX = "D0312A#1"
+    NEW2_GAS_PREFERRED_INDEX = "D0312A#2"
+
     PREFERRED_INDEX_MAP = {
-        "0": ("Indoor Allergen Index", ICON.IAI),
-        "1": ("PM2.5", ICON.PM25),
+        0: ("Indoor Allergen Index", ICON.IAI),
+        1: ("PM2.5", ICON.PM25),
     }
     GAS_PREFERRED_INDEX_MAP = {
-        "0": ("Indoor Allergen Index", ICON.IAI),
-        "1": ("PM2.5", ICON.PM25),
-        "2": ("Gas", "mdi:air"),
+        0: ("Indoor Allergen Index", ICON.IAI),
+        1: ("PM2.5", ICON.PM25),
+        2: ("Gas", ICON.GAS),
     }
     NEW_PREFERRED_INDEX_MAP = {
         "IAI": ("Indoor Allergen Index", ICON.IAI),
@@ -321,6 +400,46 @@ class PhilipsApi:
     FUNCTION_MAP = {
         "P": ("Purification", ICON.PURIFICATION_ONLY_MODE),
         "PH": ("Purification and Humidification", ICON.TWO_IN_ONE_MODE),
+    }
+    CIRCULATION_MAP = {
+        1: ("Fan", ICON.CLEAN),
+        2: ("Circulation", ICON.CIRCULATE),
+    }
+    HEATING_MAP = {
+        1: ("Fan", ICON.CLEAN),
+        2: ("Circulation", ICON.CIRCULATE),
+        3: ("Heating", ICON.HEATING),
+    }
+    TIMER_MAP = {
+        0: ("Off", "mdi:clock-plus"),
+        1: ("0.5h", "mdi:clock-time-one"),
+        2: ("1h", "mdi:clock-time-one"),
+        3: ("2h", "mdi:clock-time-two"),
+        4: ("3h", "mdi:clock-time-three"),
+        5: ("4h", "mdi:clock-time-four"),
+        6: ("5h", "mdi:clock-time-five"),
+        7: ("6h", "mdi:clock-time-six"),
+        8: ("7h", "mdi:clock-time-seven"),
+        9: ("8h", "mdi:clock-time-eight"),
+        10: ("9h", "mdi:clock-time-nine"),
+        11: ("10h", "mdi:clock-time-ten"),
+        12: ("11h", "mdi:clock-time-eleven"),
+        13: ("12h", "mdi:clock-time-twelve"),
+    }
+    TIMER2_MAP = {
+        0: ("Off", "mdi:clock-plus"),
+        2: ("1h", "mdi:clock-time-one"),
+        3: ("2h", "mdi:clock-time-two"),
+        4: ("3h", "mdi:clock-time-three"),
+        5: ("4h", "mdi:clock-time-four"),
+        6: ("5h", "mdi:clock-time-five"),
+        7: ("6h", "mdi:clock-time-six"),
+        8: ("7h", "mdi:clock-time-seven"),
+        9: ("8h", "mdi:clock-time-eight"),
+        10: ("9h", "mdi:clock-time-nine"),
+        11: ("10h", "mdi:clock-time-ten"),
+        12: ("11h", "mdi:clock-time-eleven"),
+        13: ("12h", "mdi:clock-time-twelve"),
     }
     HUMIDITY_TARGET_MAP = {
         40: ("40%", ICON.HUMIDITY_BUTTON),
@@ -354,6 +473,11 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
         FanAttributes.LABEL: FanAttributes.INDOOR_ALLERGEN_INDEX,
         ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
     },
+    PhilipsApi.NEW2_INDOOR_ALLERGEN_INDEX: {
+        FanAttributes.ICON_MAP: {0: ICON.IAI},
+        FanAttributes.LABEL: FanAttributes.INDOOR_ALLERGEN_INDEX,
+        ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
+    },
     PhilipsApi.PM25: {
         ATTR_DEVICE_CLASS: SensorDeviceClass.PM25,
         FanAttributes.ICON_MAP: {0: ICON.PM25},
@@ -368,6 +492,18 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
         FanAttributes.UNIT: CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
         ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
     },
+    PhilipsApi.NEW2_PM25: {
+        ATTR_DEVICE_CLASS: SensorDeviceClass.PM25,
+        FanAttributes.ICON_MAP: {0: ICON.PM25},
+        FanAttributes.LABEL: FanAttributes.PM25,
+        FanAttributes.UNIT: CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+        ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
+    },
+    PhilipsApi.NEW2_GAS: {
+        FanAttributes.ICON_MAP: {0: ICON.GAS},
+        FanAttributes.LABEL: FanAttributes.GAS,
+        ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
+    },
     PhilipsApi.TOTAL_VOLATILE_ORGANIC_COMPOUNDS: {
         ATTR_DEVICE_CLASS: SensorDeviceClass.VOLATILE_ORGANIC_COMPOUNDS,
         FanAttributes.ICON_MAP: {0: "mdi:blur"},
@@ -376,6 +512,13 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
         ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
     },
     PhilipsApi.HUMIDITY: {
+        ATTR_DEVICE_CLASS: SensorDeviceClass.HUMIDITY,
+        FanAttributes.ICON_MAP: {0: "mdi:water-percent"},
+        FanAttributes.LABEL: FanAttributes.HUMIDITY,
+        ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
+        FanAttributes.UNIT: PERCENTAGE,
+    },
+    PhilipsApi.NEW2_HUMIDITY: {
         ATTR_DEVICE_CLASS: SensorDeviceClass.HUMIDITY,
         FanAttributes.ICON_MAP: {0: "mdi:water-percent"},
         FanAttributes.LABEL: FanAttributes.HUMIDITY,
@@ -393,6 +536,31 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
         ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
         FanAttributes.UNIT: UnitOfTemperature.CELSIUS,
     },
+    PhilipsApi.NEW2_TEMPERATURE: {
+        ATTR_DEVICE_CLASS: SensorDeviceClass.TEMPERATURE,
+        FanAttributes.ICON_MAP: {
+            0: "mdi:thermometer-low",
+            17: "mdi:thermometer",
+            23: "mdi:thermometer-high",
+        },
+        FanAttributes.LABEL: ATTR_TEMPERATURE,
+        FanAttributes.VALUE: lambda value, _: value / 10,
+        ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
+        FanAttributes.UNIT: UnitOfTemperature.CELSIUS,
+    },
+    # PhilipsApi.NEW2_FAN_SPEED: {
+    #     FanAttributes.ICON_MAP: {
+    #         0: ICON.FAN_SPEED_BUTTON,
+    #         1: ICON.SPEED_1,
+    #         6: ICON.SPEED_2,
+    #         18: ICON.SPEED_3,
+    #     },
+    #     FanAttributes.VALUE: lambda value, _: value
+    #     if int(value) < 18
+    #     else FanAttributes.TURBO,
+    #     FanAttributes.LABEL: FanAttributes.ACTUAL_FAN_SPEED,
+    #     ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
+    # },
     # diagnostic information
     PhilipsApi.WATER_LEVEL: {
         FanAttributes.ICON_MAP: {0: ICON.WATER_REFILL, 10: "mdi:water"},
@@ -472,6 +640,24 @@ FILTER_TYPES: dict[str, FilterDescription] = {
         FanAttributes.TOTAL: PhilipsApi.FILTER_NANOPROTECT_CLEAN_TOTAL,
         FanAttributes.TYPE: "",
     },
+    PhilipsApi.NEW2_FILTER_NANOPROTECT: {
+        FanAttributes.ICON_MAP: {
+            0: ICON.FILTER_REPLACEMENT,
+            10: ICON.NANOPROTECT_FILTER,
+        },
+        FanAttributes.LABEL: FanAttributes.FILTER_NANOPROTECT,
+        FanAttributes.TOTAL: PhilipsApi.NEW2_FILTER_NANOPROTECT_TOTAL,
+        FanAttributes.TYPE: "",
+    },
+    PhilipsApi.NEW2_FILTER_NANOPROTECT_PREFILTER: {
+        FanAttributes.ICON_MAP: {
+            0: ICON.PREFILTER_CLEANING,
+            10: ICON.NANOPROTECT_FILTER,
+        },
+        FanAttributes.LABEL: FanAttributes.FILTER_NANOPROTECT_CLEAN,
+        FanAttributes.TOTAL: PhilipsApi.NEW2_FILTER_NANOPROTECT_PREFILTER_TOTAL,
+        FanAttributes.TYPE: "",
+    },
 }
 
 SWITCH_TYPES: dict[str, SwitchDescription] = {
@@ -481,6 +667,41 @@ SWITCH_TYPES: dict[str, SwitchDescription] = {
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         SWITCH_ON: True,
         SWITCH_OFF: False,
+    },
+    PhilipsApi.NEW2_CHILD_LOCK: {
+        ATTR_ICON: ICON.CHILD_LOCK_BUTTON,
+        FanAttributes.LABEL: FanAttributes.CHILD_LOCK,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        SWITCH_ON: 1,
+        SWITCH_OFF: 0,
+    },
+    PhilipsApi.NEW2_BEEP: {
+        ATTR_ICON: "mdi:volume-high",
+        FanAttributes.LABEL: FanAttributes.BEEP,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        SWITCH_ON: 100,
+        SWITCH_OFF: 0,
+    },
+    # Oscillation is part of the fan model, so the switch is removed here
+    #
+    # PhilipsApi.NEW2_SWING: {
+    #     ATTR_ICON: ICON.ROTATE,
+    #     FanAttributes.LABEL: FanAttributes.SWING,
+    #     CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+    #     SWITCH_ON: 17920,
+    #     SWITCH_OFF: 0,
+    # },
+    PhilipsApi.NEW2_STANDBY_SENSORS: {
+        ATTR_ICON: "mdi:power-settings",
+        FanAttributes.LABEL: FanAttributes.STANDBY_SENSORS,
+        SWITCH_ON: 1,
+        SWITCH_OFF: 0,
+    },
+    PhilipsApi.NEW2_AUTO_PLUS_AI: {
+        ATTR_ICON: "mdi:format-annotation-plus",
+        FanAttributes.LABEL: FanAttributes.AUTO_PLUS,
+        SWITCH_ON: 1,
+        SWITCH_OFF: 0,
     },
 }
 
@@ -507,6 +728,22 @@ LIGHT_TYPES: dict[str, LightDescription] = {
         SWITCH_ON: 100,
         SWITCH_OFF: 0,
     },
+    PhilipsApi.NEW2_DISPLAY_BACKLIGHT: {
+        ATTR_ICON: ICON.LIGHT_DIMMING_BUTTON,
+        FanAttributes.LABEL: FanAttributes.DISPLAY_BACKLIGHT,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        SWITCH_ON: 100,
+        SWITCH_OFF: 0,
+        DIMMABLE: True,
+    },
+    PhilipsApi.NEW2_DISPLAY_BACKLIGHT2: {
+        ATTR_ICON: ICON.LIGHT_DIMMING_BUTTON,
+        FanAttributes.LABEL: FanAttributes.DISPLAY_BACKLIGHT,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        SWITCH_ON: 100,
+        SWITCH_OFF: 0,
+        DIMMABLE: True,
+    },
 }
 
 SELECT_TYPES: dict[str, SelectDescription] = {
@@ -525,7 +762,12 @@ SELECT_TYPES: dict[str, SelectDescription] = {
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         OPTIONS: PhilipsApi.PREFERRED_INDEX_MAP,
     },
-    PhilipsApi.PREFERRED_INDEX: {
+    PhilipsApi.NEW_PREFERRED_INDEX: {
+        FanAttributes.LABEL: FanAttributes.PREFERRED_INDEX,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        OPTIONS: PhilipsApi.NEW_PREFERRED_INDEX_MAP,
+    },
+    PhilipsApi.NEW2_PREFERRED_INDEX: {
         FanAttributes.LABEL: FanAttributes.PREFERRED_INDEX,
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         OPTIONS: PhilipsApi.PREFERRED_INDEX_MAP,
@@ -535,9 +777,53 @@ SELECT_TYPES: dict[str, SelectDescription] = {
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         OPTIONS: PhilipsApi.GAS_PREFERRED_INDEX_MAP,
     },
-    PhilipsApi.NEW_PREFERRED_INDEX: {
+    PhilipsApi.NEW2_GAS_PREFERRED_INDEX: {
         FanAttributes.LABEL: FanAttributes.PREFERRED_INDEX,
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
-        OPTIONS: PhilipsApi.NEW_PREFERRED_INDEX_MAP,
+        OPTIONS: PhilipsApi.GAS_PREFERRED_INDEX_MAP,
+    },
+    PhilipsApi.NEW2_CIRCULATION: {
+        FanAttributes.LABEL: FanAttributes.FUNCTION,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        OPTIONS: PhilipsApi.CIRCULATION_MAP,
+    },
+    PhilipsApi.NEW2_HEATING: {
+        FanAttributes.LABEL: FanAttributes.FUNCTION,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        OPTIONS: PhilipsApi.HEATING_MAP,
+    },
+    PhilipsApi.NEW2_TIMER: {
+        FanAttributes.LABEL: FanAttributes.TIMER,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        OPTIONS: PhilipsApi.TIMER_MAP,
+    },
+    PhilipsApi.NEW2_TIMER2: {
+        FanAttributes.LABEL: FanAttributes.TIMER,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        OPTIONS: PhilipsApi.TIMER2_MAP,
+    },
+}
+
+NUMBER_TYPES: dict[str, NumberDescription] = {
+    PhilipsApi.NEW2_OSCILLATION: {
+        FanAttributes.LABEL: FanAttributes.OSCILLATION,
+        ATTR_ICON: ICON.OSCILLATE,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        FanAttributes.UNIT: "°",
+        FanAttributes.OFF: 0,
+        FanAttributes.MIN: 30,
+        FanAttributes.MAX: 350,
+        FanAttributes.STEP: 5,
+    },
+    PhilipsApi.NEW2_TARGET_TEMP: {
+        FanAttributes.LABEL: FanAttributes.TARGET_TEMP,
+        ATTR_ICON: "mdi:thermometer",
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        ATTR_DEVICE_CLASS: NumberDeviceClass.TEMPERATURE,
+        FanAttributes.UNIT: "°C",
+        FanAttributes.OFF: 1,
+        FanAttributes.MIN: 1,
+        FanAttributes.MAX: 37,
+        FanAttributes.STEP: 1,
     },
 }
