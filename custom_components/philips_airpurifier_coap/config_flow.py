@@ -128,7 +128,7 @@ class PhilipsAirPurifierConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         # set the unique id for the entry, abort if it already exists
         await self.async_set_unique_id(unique_id)
-        self._abort_if_unique_id_configured()
+        self._abort_if_unique_id_configured(updates={CONF_HOST: self._host})
 
         # store the data for the next step to get confirmation
         self.context.update(
@@ -254,7 +254,7 @@ class PhilipsAirPurifierConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
                 # set the unique id for the entry, abort if it already exists
                 await self.async_set_unique_id(unique_id)
-                self._abort_if_unique_id_configured()
+                self._abort_if_unique_id_configured(updates={CONF_HOST: self._host})
 
                 # compile a name and return the config entry
                 return self.async_create_entry(
