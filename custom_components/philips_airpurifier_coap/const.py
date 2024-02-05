@@ -225,6 +225,7 @@ class FanAttributes(StrEnum):
     HUMIDITY_TARGET = "humidity_target"
     INDOOR_ALLERGEN_INDEX = "indoor_allergen_index"
     LABEL = "label"
+    LEVEL = "level"
     UNIT = "unit"
     VALUE = "value"
     LANGUAGE = "language"
@@ -508,7 +509,7 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
         ATTR_DEVICE_CLASS: SensorDeviceClass.VOLATILE_ORGANIC_COMPOUNDS,
         FanAttributes.ICON_MAP: {0: "mdi:blur"},
         FanAttributes.LABEL: FanAttributes.TOTAL_VOLATILE_ORGANIC_COMPOUNDS,
-        FanAttributes.UNIT: CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+        FanAttributes.UNIT: "L",
         ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
     },
     PhilipsApi.HUMIDITY: {
