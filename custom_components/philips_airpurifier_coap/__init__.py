@@ -2,11 +2,14 @@
 from __future__ import annotations
 
 import asyncio
+from functools import partial
+from ipaddress import ip_address
 import json
 import logging
 from os import path, walk
 
 from aioairctrl import CoAPClient
+from getmac import get_mac_address
 
 from homeassistant.components.frontend import add_extra_js_url
 from homeassistant.components.http.view import HomeAssistantView
@@ -88,9 +91,24 @@ async def async_setup(hass: HomeAssistant, config) -> bool:
     return True
 
 
+async def async_get_mac_address_from_host(hass: HomeAssistant, host: str) -> str | None:
+    """Get mac address from host."""
+    ip_addr = ip_address(host)
+    if ip_addr.version == 4:
+        mac_address = await hass.async_add_executor_job(
+            partial(get_mac_address, ip=host)
+        )
+    else:
+        mac_address = await hass.async_add_executor_job(
+            partial(get_mac_address, ip6=host)
+        )
+    return mac_address
+
+
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up the Philips AirPurifier integration."""
     host = entry.data[CONF_HOST]
+    mac = await async_get_mac_address_from_host(hass, host)
 
     _LOGGER.debug("async_setup_entry called for host %s", host)
 
@@ -102,7 +120,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         _LOGGER.warning(r"Failed to connect to host %s: %s", host, ex)
         raise ConfigEntryNotReady from ex
 
-    coordinator = Coordinator(client, host)
+    coordinator = Coordinator(client, host, mac)
     _LOGGER.debug("got a valid coordinator for host %s", host)
 
     data = hass.data.get(DOMAIN)

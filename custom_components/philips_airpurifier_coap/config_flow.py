@@ -272,6 +272,7 @@ class PhilipsAirPurifierConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 user_input[CONF_MODEL] = self._model
                 user_input[CONF_NAME] = self._name
                 user_input[CONF_DEVICE_ID] = self._device_id
+
                 _LOGGER.debug(
                     "Detected host %s as model %s with name: %s",
                     self._host,

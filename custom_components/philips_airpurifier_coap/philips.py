@@ -14,6 +14,7 @@ from aioairctrl import CoAPClient
 from homeassistant.components.fan import FanEntity, FanEntityFeature
 from homeassistant.core import CALLBACK_TYPE, callback
 from homeassistant.exceptions import ConfigEntryNotReady, PlatformNotReady
+from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC, DeviceInfo
 from homeassistant.helpers.entity import Entity
 from homeassistant.util.percentage import (
     ordered_list_item_to_percentage,
@@ -41,9 +42,10 @@ MISSED_PACKAGE_COUNT = 3
 class Coordinator:
     """Class to coordinate the data requests from the Philips API."""
 
-    def __init__(self, client: CoAPClient, host: str) -> None:  # noqa: D107
+    def __init__(self, client: CoAPClient, host: str, mac: str) -> None:  # noqa: D107
         self.client = client
         self._host = host
+        self._mac = mac
 
         # It's None before the first successful update.
         # Components should call async_first_refresh to make sure the first
@@ -206,6 +208,7 @@ class PhilipsEntity(Entity):
         )[0]
         self._firmware = coordinator.status["WifiVersion"]
         self._manufacturer = "Philips"
+        self._mac = coordinator._mac
 
     @property
     def should_poll(self) -> bool:
@@ -213,15 +216,18 @@ class PhilipsEntity(Entity):
         return False
 
     @property
-    def device_info(self):
+    def device_info(self) -> DeviceInfo:
         """Return info about the device."""
-        return {
-            "identifiers": {(DOMAIN, self._serialNumber)},
-            "name": self._name,
-            "model": self._modelName,
-            "manufacturer": self._manufacturer,
-            "sw_version": self._firmware,
-        }
+        return DeviceInfo(
+            identifiers={(DOMAIN, self._serialNumber)},
+            connections={(CONNECTION_NETWORK_MAC, self._mac)}
+            if self._mac is not None
+            else None,
+            name=self._name,
+            model=self._modelName,
+            manufacturer=self._manufacturer,
+            sw_version=self._firmware,
+        )
 
     @property
     def available(self):
