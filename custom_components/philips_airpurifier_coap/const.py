@@ -458,12 +458,13 @@ class PhilipsApi:
 
 SENSOR_TYPES: dict[str, SensorDescription] = {
     # device sensors
-    PhilipsApi.AIR_QUALITY_INDEX: {
-        ATTR_DEVICE_CLASS: SensorDeviceClass.AQI,
-        FanAttributes.ICON_MAP: {0: "mdi:blur"},
-        FanAttributes.LABEL: FanAttributes.AIR_QUALITY_INDEX,
-        ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
-    },
+    # NOTE: removed AQI as this turns out not to be a sensor, but a setting of the mobile app
+    # PhilipsApi.AIR_QUALITY_INDEX: {
+    #     ATTR_DEVICE_CLASS: SensorDeviceClass.AQI,
+    #     FanAttributes.ICON_MAP: {0: "mdi:blur"},
+    #     FanAttributes.LABEL: FanAttributes.AIR_QUALITY_INDEX,
+    #     ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
+    # },
     PhilipsApi.INDOOR_ALLERGEN_INDEX: {
         FanAttributes.ICON_MAP: {0: ICON.IAI},
         FanAttributes.LABEL: FanAttributes.INDOOR_ALLERGEN_INDEX,
