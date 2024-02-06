@@ -16,6 +16,9 @@
     },
     {
       "hostname": "mxchip*"
+    },
+    {
+      "registered_devices": true
     }
   ],
   "documentation": "https://github.com/kongo09/philips-airpurifier-coap",
