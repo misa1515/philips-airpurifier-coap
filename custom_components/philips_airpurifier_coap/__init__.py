@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import asyncio
 from functools import partial
-from ipaddress import ip_address
+from ipaddress import IPv6Address, ip_address
 import json
 import logging
 from os import path, walk
@@ -17,6 +17,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
+from homeassistant.helpers.device_registry import format_mac
 
 from .const import (
     DATA_KEY_CLIENT,
@@ -93,16 +94,31 @@ async def async_setup(hass: HomeAssistant, config) -> bool:
 
 async def async_get_mac_address_from_host(hass: HomeAssistant, host: str) -> str | None:
     """Get mac address from host."""
-    ip_addr = ip_address(host)
-    if ip_addr.version == 4:
+    mac_address: str | None
+
+    # first we try if this is an ip address
+    try:
+        ip_addr = ip_address(host)
+    except ValueError:
+        # that didn't work, so try a hostname
         mac_address = await hass.async_add_executor_job(
-            partial(get_mac_address, ip=host)
+            partial(get_mac_address, hostname=host)
         )
     else:
-        mac_address = await hass.async_add_executor_job(
-            partial(get_mac_address, ip6=host)
-        )
-    return mac_address
+        # it is an ip address, but it could be IPv4 or IPv6
+        if ip_addr.version == 4:
+            mac_address = await hass.async_add_executor_job(
+                partial(get_mac_address, ip=host)
+            )
+        else:
+            ip_addr = IPv6Address(int(ip_addr))
+            mac_address = await hass.async_add_executor_job(
+                partial(get_mac_address, ip6=str(ip_addr))
+            )
+    if not mac_address:
+        return None
+    
+    return format_mac(mac_address)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
