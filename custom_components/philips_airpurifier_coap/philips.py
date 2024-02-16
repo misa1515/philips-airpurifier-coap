@@ -1178,6 +1178,44 @@ class PhilipsAC3259(PhilipsGenericCoAPFan):
     AVAILABLE_SELECTS = [PhilipsApi.GAS_PREFERRED_INDEX]
 
 
+class PhilipsAC3737(PhilipsNew2GenericCoAPFan):
+    """AC3737."""
+
+    AVAILABLE_PRESET_MODES = {
+        # PresetMode.AUTO: {
+        #     PhilipsApi.NEW2_POWER: 1,
+        #     PhilipsApi.NEW2_MODE_A: 3,
+        #     PhilipsApi.NEW2_MODE_B: 0,
+        # },
+        # PresetMode.HIGH: {
+        #     PhilipsApi.POWER: 1,
+        #     PhilipsApi.NEW2_MODE_A: 3,
+        #     PhilipsApi.NEW2_MODE_B: 65,
+        # },
+        # PresetMode.LOW: {
+        #     PhilipsApi.POWER: 1,
+        #     PhilipsApi.NEW2_MODE_A: 3,
+        #     PhilipsApi.NEW2_MODE_B: 66,
+        # },
+    }
+    AVAILABLE_SPEEDS = {
+        # PresetMode.HIGH: {
+        #     PhilipsApi.POWER: 1,
+        #     PhilipsApi.NEW2_MODE_A: 3,
+        #     PhilipsApi.NEW2_MODE_B: 65,
+        # },
+        # PresetMode.LOW: {
+        #     PhilipsApi.POWER: 1,
+        #     PhilipsApi.NEW2_MODE_A: 3,
+        #     PhilipsApi.NEW2_MODE_B: 66,
+        # },
+    }
+
+    AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT2]
+    AVAILABLE_SWITCHES = [PhilipsApi.NEW2_CHILD_LOCK]
+    UNAVAILABLE_SENSORS = [PhilipsApi.NEW2_FAN_SPEED]
+
+
 class PhilipsAC3829(PhilipsHumidifierMixin, PhilipsGenericCoAPFan):
     """AC3829."""
 
@@ -1749,6 +1787,7 @@ model_to_class = {
     FanModel.AC3055: PhilipsAC3055,
     FanModel.AC3059: PhilipsAC3059,
     FanModel.AC3259: PhilipsAC3259,
+    FanModel.AC3737: PhilipsAC3737,
     FanModel.AC3829: PhilipsAC3829,
     FanModel.AC3836: PhilipsAC3836,
     FanModel.AC3854_50: PhilipsAC385450,
