@@ -1182,33 +1182,43 @@ class PhilipsAC3737(PhilipsNew2GenericCoAPFan):
     """AC3737."""
 
     AVAILABLE_PRESET_MODES = {
-        # PresetMode.AUTO: {
-        #     PhilipsApi.NEW2_POWER: 1,
-        #     PhilipsApi.NEW2_MODE_A: 3,
-        #     PhilipsApi.NEW2_MODE_B: 0,
-        # },
-        # PresetMode.HIGH: {
-        #     PhilipsApi.POWER: 1,
-        #     PhilipsApi.NEW2_MODE_A: 3,
-        #     PhilipsApi.NEW2_MODE_B: 65,
-        # },
-        # PresetMode.LOW: {
-        #     PhilipsApi.POWER: 1,
-        #     PhilipsApi.NEW2_MODE_A: 3,
-        #     PhilipsApi.NEW2_MODE_B: 66,
-        # },
+        PresetMode.AUTO: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 2,
+            PhilipsApi.NEW2_MODE_B: 0,
+        },
+        PresetMode.SLEEP: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 2,
+            PhilipsApi.NEW2_MODE_B: 17,
+        },
+        PresetMode.TURBO: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 3,
+            PhilipsApi.NEW2_MODE_B: 18,
+        },
     }
     AVAILABLE_SPEEDS = {
-        # PresetMode.HIGH: {
-        #     PhilipsApi.POWER: 1,
-        #     PhilipsApi.NEW2_MODE_A: 3,
-        #     PhilipsApi.NEW2_MODE_B: 65,
-        # },
-        # PresetMode.LOW: {
-        #     PhilipsApi.POWER: 1,
-        #     PhilipsApi.NEW2_MODE_A: 3,
-        #     PhilipsApi.NEW2_MODE_B: 66,
-        # },
+        PresetMode.SLEEP: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 2,
+            PhilipsApi.NEW2_MODE_B: 17,
+        },
+        PresetMode.SPEED_1: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 2,
+            PhilipsApi.NEW2_MODE_B: 1,
+        },
+        PresetMode.SPEED_2: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 2,
+            PhilipsApi.NEW2_MODE_B: 2,
+        },
+        PresetMode.TURBO: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 3,
+            PhilipsApi.NEW2_MODE_B: 18,
+        },
     }
 
     AVAILABLE_SELECTS = [PhilipsApi.NEW2_HUMIDITY_TARGET]
