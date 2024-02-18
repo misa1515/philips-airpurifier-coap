@@ -366,6 +366,7 @@ class PhilipsApi:
     NEW2_PM25 = "D03221"
     NEW2_GAS = "D03122"
     NEW2_HUMIDITY = "D03125"
+    NEW2_HUMIDITY_TARGET = "D03128"
     NEW2_FILTER_NANOPROTECT_PREFILTER = "D0520D"
     NEW2_FILTER_NANOPROTECT = "D0540E"
     NEW2_FILTER_NANOPROTECT_PREFILTER_TOTAL = "D05207"
@@ -756,6 +757,11 @@ SELECT_TYPES: dict[str, SelectDescription] = {
         OPTIONS: PhilipsApi.FUNCTION_MAP,
     },
     PhilipsApi.HUMIDITY_TARGET: {
+        FanAttributes.LABEL: FanAttributes.HUMIDITY_TARGET,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        OPTIONS: PhilipsApi.HUMIDITY_TARGET_MAP,
+    },
+    PhilipsApi.NEW2_HUMIDITY_TARGET: {
         FanAttributes.LABEL: FanAttributes.HUMIDITY_TARGET,
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         OPTIONS: PhilipsApi.HUMIDITY_TARGET_MAP,
