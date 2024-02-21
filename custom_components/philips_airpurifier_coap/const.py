@@ -504,13 +504,13 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
     PhilipsApi.NEW2_GAS: {
         FanAttributes.ICON_MAP: {0: ICON.GAS},
         FanAttributes.LABEL: FanAttributes.GAS,
+        FanAttributes.UNIT: "L",
         ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
     },
     PhilipsApi.TOTAL_VOLATILE_ORGANIC_COMPOUNDS: {
         ATTR_DEVICE_CLASS: SensorDeviceClass.VOLATILE_ORGANIC_COMPOUNDS,
         FanAttributes.ICON_MAP: {0: "mdi:blur"},
         FanAttributes.LABEL: FanAttributes.TOTAL_VOLATILE_ORGANIC_COMPOUNDS,
-        FanAttributes.UNIT: "L",
         ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
     },
     PhilipsApi.HUMIDITY: {
