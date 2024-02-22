@@ -600,6 +600,10 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
     # },
 }
 
+EXTRA_SENSOR_TYPES: dict[str, SensorDescription] = {
+    # device sensors
+}
+
 FILTER_TYPES: dict[str, FilterDescription] = {
     PhilipsApi.FILTER_PRE: {
         FanAttributes.ICON_MAP: {0: ICON.FILTER_REPLACEMENT, 72: "mdi:dots-grid"},
