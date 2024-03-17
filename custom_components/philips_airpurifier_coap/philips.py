@@ -530,7 +530,7 @@ class PhilipsGenericCoAPFan(PhilipsGenericCoAPFanBase):
         (FanAttributes.SOFTWARE_VERSION, PhilipsApi.SOFTWARE_VERSION),
         (FanAttributes.WIFI_VERSION, PhilipsApi.WIFI_VERSION),
         (FanAttributes.ERROR_CODE, PhilipsApi.ERROR_CODE),
-        (FanAttributes.ERROR, PhilipsApi.ERROR_CODE, PhilipsApi.ERROR_CODE_MAP),
+        # (FanAttributes.ERROR, PhilipsApi.ERROR_CODE, PhilipsApi.ERROR_CODE_MAP),
         # device configuration
         (FanAttributes.LANGUAGE, PhilipsApi.LANGUAGE),
         (
@@ -606,7 +606,7 @@ class PhilipsNew2GenericCoAPFan(PhilipsGenericCoAPFanBase):
         (FanAttributes.DEVICE_ID, PhilipsApi.DEVICE_ID),
         (FanAttributes.SOFTWARE_VERSION, PhilipsApi.NEW2_SOFTWARE_VERSION),
         (FanAttributes.WIFI_VERSION, PhilipsApi.WIFI_VERSION),
-        # (FanAttributes.ERROR_CODE, PhilipsApi.ERROR_CODE),
+        (FanAttributes.ERROR_CODE, PhilipsApi.NEW2_ERROR_CODE),
         # (FanAttributes.ERROR, PhilipsApi.ERROR_CODE, PhilipsApi.ERROR_CODE_MAP),
         # device configuration
         (

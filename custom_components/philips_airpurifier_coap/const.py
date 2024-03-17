@@ -386,6 +386,7 @@ class PhilipsApi:
     NEW2_AUTO_PLUS_AI = "D03180"
     NEW2_PREFERRED_INDEX = "D0312A#1"
     NEW2_GAS_PREFERRED_INDEX = "D0312A#2"
+    NEW2_ERROR_CODE = "D03240 "
 
     PREFERRED_INDEX_MAP = {
         0: ("Indoor Allergen Index", ICON.IAI),
@@ -449,12 +450,6 @@ class PhilipsApi:
         50: ("50%", ICON.HUMIDITY_BUTTON),
         60: ("60%", ICON.HUMIDITY_BUTTON),
         70: ("max", ICON.HUMIDITY_BUTTON),
-    }
-    ERROR_CODE_MAP = {
-        32768: "no water",
-        49153: "pre-filter must be cleaned",
-        49155: "pre-filter must be cleaned",
-        49408: "no water",
     }
 
 
