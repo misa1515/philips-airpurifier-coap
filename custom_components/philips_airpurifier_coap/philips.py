@@ -293,6 +293,7 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
     AVAILABLE_SWITCHES = []
     AVAILABLE_LIGHTS = []
     AVAILABLE_NUMBERS = []
+    AVAILABLE_BINARY_SENSORS = []
 
     KEY_PHILIPS_POWER = PhilipsApi.POWER
     STATE_POWER_ON = "1"
@@ -635,6 +636,7 @@ class PhilipsHumidifierMixin(PhilipsGenericCoAPFanBase):
     """Mixin for humidifiers."""
 
     AVAILABLE_SELECTS = [PhilipsApi.FUNCTION, PhilipsApi.HUMIDITY_TARGET]
+    AVAILABLE_BINARY_SENSORS = [PhilipsApi.ERROR_CODE]
 
 
 # similar to the AC1715, the AC0850 seems to be a new class of devices that
@@ -1225,6 +1227,7 @@ class PhilipsAC3737(PhilipsNew2GenericCoAPFan):
     AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT2]
     AVAILABLE_SWITCHES = [PhilipsApi.NEW2_CHILD_LOCK]
     UNAVAILABLE_SENSORS = [PhilipsApi.NEW2_FAN_SPEED]
+    AVAILABLE_BINARY_SENSORS = [PhilipsApi.NEW2_ERROR_CODE, PhilipsApi.NEW2_MODE_A]
 
 
 class PhilipsAC3829(PhilipsHumidifierMixin, PhilipsGenericCoAPFan):

@@ -223,6 +223,7 @@ class FanAttributes(StrEnum):
     FILTER_NANOPROTECT_CLEAN = "pre_filter"
     FUNCTION = "function"
     HUMIDITY = "humidity"
+    HUMIDIFIER = "humidification"
     HUMIDITY_TARGET = "humidity_target"
     INDOOR_ALLERGEN_INDEX = "indoor_allergen_index"
     LABEL = "label"
@@ -262,6 +263,7 @@ class FanAttributes(StrEnum):
     TARGET_TEMP = "target_temperature"
     STANDBY_SENSORS = "standby_sensors"
     AUTO_PLUS = "auto_plus"
+    WATER_TANK = "water_tank"
 
 
 class FanUnits(StrEnum):
@@ -594,6 +596,50 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
     #     FanAttributes.UNIT: UnitOfTime.MILLISECONDS,
     #     CONF_ENTITY_CATEGORY: EntityCategory.DIAGNOSTIC,
     # },
+}
+
+BINARY_SENSOR_TYPES: dict[str, SensorDescription] = {
+    # binary device sensors
+    PhilipsApi.ERROR_CODE: {
+        # test for out of water error, which is in bit 9 of the error number
+        FanAttributes.ICON_MAP: {
+            True: "mdi:water",
+            False: "mdi:water-off",
+        },
+        FanAttributes.LABEL: FanAttributes.WATER_TANK,
+        ATTR_DEVICE_CLASS: SensorDeviceClass.MOISTURE,
+        FanAttributes.VALUE: lambda value: not value & (1 << 8),
+        CONF_ENTITY_CATEGORY: EntityCategory.DIAGNOSTIC,
+    },
+    PhilipsApi.NEW2_ERROR_CODE: {
+        # test for out of water error, which is in bit 9 of the error number
+        FanAttributes.ICON_MAP: {
+            True: "mdi:water",
+            False: "mdi:water-off",
+        },
+        FanAttributes.LABEL: FanAttributes.WATER_TANK,
+        ATTR_DEVICE_CLASS: SensorDeviceClass.MOISTURE,
+        FanAttributes.VALUE: lambda value: not value & (1 << 8),
+        CONF_ENTITY_CATEGORY: EntityCategory.DIAGNOSTIC,
+    },
+    PhilipsApi.FUNCTION: {
+        # test if the water container is available and thus humidification switched on
+        FanAttributes.ICON_MAP: {
+            True: PhilipsApi.FUNCTION_MAP["PH"][1],
+            False: PhilipsApi.FUNCTION_MAP["P"][1],
+        },
+        FanAttributes.LABEL: FanAttributes.HUMIDIFIER,
+        FanAttributes.VALUE: lambda value: value == "PH",
+    },
+    PhilipsApi.NEW2_MODE_A: {
+        # test if the water container is available and thus humidification switched on
+        FanAttributes.ICON_MAP: {
+            True: PhilipsApi.FUNCTION_MAP["PH"][1],
+            False: PhilipsApi.FUNCTION_MAP["P"][1],
+        },
+        FanAttributes.LABEL: FanAttributes.HUMIDIFIER,
+        FanAttributes.VALUE: lambda value: value == 4,
+    },
 }
 
 FILTER_TYPES: dict[str, FilterDescription] = {

@@ -36,7 +36,7 @@ from .philips import Coordinator
 _LOGGER = logging.getLogger(__name__)
 
 
-PLATFORMS = ["fan", "sensor", "switch", "light", "select", "number"]
+PLATFORMS = ["fan", "binary_sensor", "sensor", "switch", "light", "select", "number"]
 
 
 # icons code thanks to Thomas Loven:
@@ -117,7 +117,7 @@ async def async_get_mac_address_from_host(hass: HomeAssistant, host: str) -> str
             )
     if not mac_address:
         return None
-    
+
     return format_mac(mac_address)
 
 
