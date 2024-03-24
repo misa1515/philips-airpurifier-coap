@@ -293,7 +293,7 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
     AVAILABLE_SWITCHES = []
     AVAILABLE_LIGHTS = []
     AVAILABLE_NUMBERS = []
-    EXTRA_SENSORS = []
+    AVAILABLE_BINARY_SENSORS = []
 
     KEY_PHILIPS_POWER = PhilipsApi.POWER
     STATE_POWER_ON = "1"
@@ -531,7 +531,7 @@ class PhilipsGenericCoAPFan(PhilipsGenericCoAPFanBase):
         (FanAttributes.SOFTWARE_VERSION, PhilipsApi.SOFTWARE_VERSION),
         (FanAttributes.WIFI_VERSION, PhilipsApi.WIFI_VERSION),
         (FanAttributes.ERROR_CODE, PhilipsApi.ERROR_CODE),
-        (FanAttributes.ERROR, PhilipsApi.ERROR_CODE, PhilipsApi.ERROR_CODE_MAP),
+        # (FanAttributes.ERROR, PhilipsApi.ERROR_CODE, PhilipsApi.ERROR_CODE_MAP),
         # device configuration
         (FanAttributes.LANGUAGE, PhilipsApi.LANGUAGE),
         (
@@ -608,7 +608,7 @@ class PhilipsNew2GenericCoAPFan(PhilipsGenericCoAPFanBase):
         (FanAttributes.SOFTWARE_VERSION, PhilipsApi.NEW2_SOFTWARE_VERSION),
         (FanAttributes.WIFI_VERSION, PhilipsApi.WIFI_VERSION),
         (FanAttributes.ERROR_CODE, PhilipsApi.NEW2_ERROR_CODE),
-        (FanAttributes.ERROR, PhilipsApi.NEW2_ERROR_CODE, PhilipsApi.ERROR_CODE_MAP),
+        # (FanAttributes.ERROR, PhilipsApi.ERROR_CODE, PhilipsApi.ERROR_CODE_MAP),
         # device configuration
         (
             FanAttributes.PREFERRED_INDEX,
@@ -636,6 +636,7 @@ class PhilipsHumidifierMixin(PhilipsGenericCoAPFanBase):
     """Mixin for humidifiers."""
 
     AVAILABLE_SELECTS = [PhilipsApi.FUNCTION, PhilipsApi.HUMIDITY_TARGET]
+    AVAILABLE_BINARY_SENSORS = [PhilipsApi.ERROR_CODE]
 
 
 # similar to the AC1715, the AC0850 seems to be a new class of devices that
@@ -1177,6 +1178,56 @@ class PhilipsAC3259(PhilipsGenericCoAPFan):
         },
     }
     AVAILABLE_SELECTS = [PhilipsApi.GAS_PREFERRED_INDEX]
+
+
+class PhilipsAC3737(PhilipsNew2GenericCoAPFan):
+    """AC3737."""
+
+    AVAILABLE_PRESET_MODES = {
+        PresetMode.AUTO: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 2,
+            PhilipsApi.NEW2_MODE_B: 0,
+        },
+        PresetMode.SLEEP: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 2,
+            PhilipsApi.NEW2_MODE_B: 17,
+        },
+        PresetMode.TURBO: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 3,
+            PhilipsApi.NEW2_MODE_B: 18,
+        },
+    }
+    AVAILABLE_SPEEDS = {
+        PresetMode.SLEEP: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 2,
+            PhilipsApi.NEW2_MODE_B: 17,
+        },
+        PresetMode.SPEED_1: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 2,
+            PhilipsApi.NEW2_MODE_B: 1,
+        },
+        PresetMode.SPEED_2: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 2,
+            PhilipsApi.NEW2_MODE_B: 2,
+        },
+        PresetMode.TURBO: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_A: 3,
+            PhilipsApi.NEW2_MODE_B: 18,
+        },
+    }
+
+    AVAILABLE_SELECTS = [PhilipsApi.NEW2_HUMIDITY_TARGET]
+    AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT2]
+    AVAILABLE_SWITCHES = [PhilipsApi.NEW2_CHILD_LOCK]
+    UNAVAILABLE_SENSORS = [PhilipsApi.NEW2_FAN_SPEED]
+    AVAILABLE_BINARY_SENSORS = [PhilipsApi.NEW2_ERROR_CODE, PhilipsApi.NEW2_MODE_A]
 
 
 class PhilipsAC3829(PhilipsHumidifierMixin, PhilipsGenericCoAPFan):
@@ -1750,6 +1801,7 @@ model_to_class = {
     FanModel.AC3055: PhilipsAC3055,
     FanModel.AC3059: PhilipsAC3059,
     FanModel.AC3259: PhilipsAC3259,
+    FanModel.AC3737: PhilipsAC3737,
     FanModel.AC3829: PhilipsAC3829,
     FanModel.AC3836: PhilipsAC3836,
     FanModel.AC3854_50: PhilipsAC385450,
